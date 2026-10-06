@@ -5,7 +5,7 @@ import cors from "cors";
 
 import connectDB from "./config/db.js";
 
-import todoRoutes from "./routes/todoRoutes.js";
+import taskRoutes from "./routes/taskRoutes.js";
 import authRoutes from "./routes/authRoutes.js"
 
 import dns from 'node:dns';
@@ -23,7 +23,7 @@ app.use(cors({
 app.use(express.json());
 
 // Todo Routes
-app.use('/api/todos', todoRoutes);
+app.use("/api/tasks", taskRoutes);
 app.use('/api/auth', authRoutes);
 
 app.get('/', (req, res) => {
