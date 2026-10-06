@@ -1,0 +1,18 @@
+.server-loading-overlay {
+  position: fixed;
+  inset: 0;
+
+  background: rgba(255, 255, 255, 0.60);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  z-index: 99999;
+}
+
+.server-loading-content {
+  text-align: center;
+  padding: 30px;
+  max-width: 450px;
+}

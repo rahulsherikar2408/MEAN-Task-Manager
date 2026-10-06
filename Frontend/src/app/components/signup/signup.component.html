@@ -1,0 +1,136 @@
+<div class="container mt-5 mb-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow">
+        <div class="card-body">
+
+          <h3 class="text-center mb-4">Create Account</h3>
+
+          <form #signupForm="ngForm" (ngSubmit)="signup()">
+            
+            <div>
+              <label for="name" class="form-label">Name</label>
+              <input
+                type="text"
+                name="name"
+                class="form-control"
+                required
+                [(ngModel)]="name"
+                #nameField="ngModel"
+              />
+              <div
+                class="text-danger mt-1"
+                *ngIf="nameField && (nameField.dirty || nameField.touched)"
+              >
+                <small *ngIf="nameField.errors?.['required']"
+                  >Name is required.</small
+                >
+              </div>
+            </div>
+
+            <div>
+              <label for="email" class="form-label">Email</label>
+              <input
+                type="email"
+                name="email"
+                class="form-control"
+                required
+                email
+                [(ngModel)]="email"
+                #emailField="ngModel"
+              />
+              <div class="text-danger mt-1" *ngIf="emailField">
+                <div
+                  *ngIf="
+                    emailField.invalid &&
+                    (emailField.dirty || emailField.touched)
+                  "
+                >
+                  <small *ngIf="emailField.errors?.['required']"
+                    >Email is required</small
+                  >
+                  <small *ngIf="emailField.errors?.['email']"
+                    >Enter a valid email</small
+                  >
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <label for="password" class="form-label">Password</label>
+              <input
+                type="password"
+                name="password"
+                class="form-control"
+                required
+                minlength="8"
+                [(ngModel)]="password"
+                #passwordField="ngModel"
+              />
+              <div
+                class="text-danger mt-1"
+                *ngIf="
+                  passwordField.invalid &&
+                  (passwordField.dirty || passwordField.touched)
+                "
+              >
+                <small *ngIf="passwordField.errors?.['required']">
+                  Password is required.
+                </small>
+                <small *ngIf="passwordField.errors?.['minlength']">
+                  Password must be at least 8 characters.
+                </small>
+              </div>
+            </div>
+
+            <div>
+              <label for="confirmPassword" class="form-label">Confirm Password</label>
+              <input
+                type="password"
+                name="confirmPassword"
+                class="form-control"
+                required
+                minlength="8"
+                [(ngModel)]="confirmPassword"
+                #confirmPasswordField="ngModel"
+              />
+              <div
+                class="text-danger mt-1"
+                *ngIf="
+                  confirmPasswordField.invalid &&
+                  (confirmPasswordField.dirty || confirmPasswordField.touched)
+                "
+              >
+                <small *ngIf="confirmPasswordField.errors?.['required']">
+                  Password is required.
+                </small>
+                <small *ngIf="confirmPasswordField.errors?.['minlength']">
+                  Password must be at least 8 characters.
+                </small>
+              </div>
+            </div>
+
+            <button 
+                type="submit" 
+                class="btn btn-success w-100 mt-3" 
+                [disabled]="signupForm.invalid || loading"
+            >
+                <span 
+                    *ngIf="loading" 
+                    class="spinner-border spinner-border-sm me-2">
+                </span>
+                {{ loading ? 'Creating Account...' : 'Sign Up' }}
+            </button>
+
+          </form>
+
+          <div class="text-center mt-3">
+            Already have an account?
+            <a routerLink="/login">Login</a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

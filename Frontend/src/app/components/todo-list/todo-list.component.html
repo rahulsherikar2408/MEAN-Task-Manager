@@ -1,0 +1,169 @@
+<div class="container mt-4">
+  <div class="card mb-3">
+    <div class="card-body">
+
+      <!-- Heading -->
+      <h4 class="mb-3">
+        {{ isHomePage ? "Recent Todos" : "My-Todos" }}
+      </h4>
+
+
+      <!-- Search & Filters -->
+      <div *ngIf="!isHomePage">
+
+        <!-- Search Todo -->
+        <input
+          type="text"
+          class="form-control mb-3"
+          placeholder="Search Todo"
+          [(ngModel)]="searchText"
+        />
+
+
+        <!-- Filters -->
+        <div class="row mb-4">
+
+          <!-- Status Filter -->
+          <div class="col-md-4 mb-2">
+
+            <div class="btn-group w-100">
+
+              <button
+                class="btn"
+                [ngClass]="
+                  filter === 'All'
+                    ? 'btn-primary'
+                    : 'btn-outline-primary'
+                "
+                (click)="filter = 'All'"
+              >
+                All
+              </button>
+
+              <button
+                class="btn"
+                [ngClass]="
+                  filter === 'Pending'
+                    ? 'btn-warning'
+                    : 'btn-outline-warning'
+                "
+                (click)="filter = 'Pending'"
+              >
+                Pending
+              </button>
+
+              <button
+                class="btn"
+                [ngClass]="
+                  filter === 'Completed'
+                    ? 'btn-success'
+                    : 'btn-outline-success'
+                "
+                (click)="filter = 'Completed'"
+              >
+                Completed
+              </button>
+
+            </div>
+
+          </div>
+
+
+          <!-- Priority Filter -->
+          <div class="col-md-4 mb-2">
+
+            <select
+              class="form-select"
+              [(ngModel)]="priority"
+            >
+              <option value="All">All Priorities</option>
+              <option value="High">High</option>
+              <option value="Medium">Medium</option>
+              <option value="Low">Low</option>
+            </select>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- ========================= -->
+      <!-- Home Page: Recent Todos -->
+      <!-- ========================= -->
+
+      <div *ngIf="isHomePage">
+
+        <!-- Todos Found -->
+        <div *ngIf="todos.length > 0; else noTodos">
+
+          <div *ngFor="let todo of todos | slice: 0 : 5">
+            <app-todo-item [todo]="todo"></app-todo-item>
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- ========================= -->
+      <!-- My-Todos Page -->
+      <!-- ========================= -->
+
+      <div *ngIf="!isHomePage">
+
+        <!-- Filtered Todos Found -->
+        <div
+          *ngIf="
+            (
+              todos
+              | searchTodo: searchText
+              | filterTodo: filter
+              | priorityFilter: priority
+            ).length > 0;
+            else noTodos
+          "
+        >
+
+          <div
+            *ngFor="
+              let todo of todos
+                | searchTodo: searchText
+                | filterTodo: filter
+                | priorityFilter: priority
+            "
+          >
+            <app-todo-item [todo]="todo"></app-todo-item>
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- ========================= -->
+      <!-- No Todos Message -->
+      <!-- ========================= -->
+
+      <ng-template #noTodos>
+
+        <div class="text-center py-2">
+
+          <i class="fa-regular fa-circle-xmark fa-2x text-secondary mb-3"></i>
+
+          <h5 class="text-secondary">
+            No todos found.
+          </h5>
+
+          <p class="text-muted mb-0">
+            Create one to get started!
+          </p>
+
+        </div>
+
+      </ng-template>
+
+    </div>
+  </div>
+</div>

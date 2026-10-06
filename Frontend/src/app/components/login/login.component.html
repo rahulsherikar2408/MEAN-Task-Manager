@@ -1,0 +1,86 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-5">
+      <div class="card shadow">
+        <div class="card-body">
+
+          <h3 class="text-center mb-4">Login</h3>
+
+          <form #loginForm="ngForm" (ngSubmit)="login()">
+
+            <div class="mb-3">
+              <label class="form-label">
+                Email
+              </label>
+              <input
+                type="email"
+                class="form-control"
+                name="email"
+                [(ngModel)]="email"
+                #emailField="ngModel"
+                required
+                email
+              >
+              <div
+                class="text-danger mt-1"
+                *ngIf="
+                  emailField.invalid &&
+                  (emailField.dirty || emailField.touched)
+                ">
+                <small
+                  *ngIf="emailField.errors?.['required']">
+                  Email is required.
+                </small>
+                <small
+                  *ngIf="emailField.errors?.['email']">
+                  Enter a valid email.
+                </small>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">
+                Password
+              </label>
+              <input
+                type="password"
+                class="form-control"
+                name="password"
+                [(ngModel)]="password"
+                #passwordField="ngModel"
+                required
+              >
+              <div
+                class="text-danger mt-1"
+                *ngIf="
+                  passwordField.invalid &&
+                  (passwordField.dirty || passwordField.touched)
+                ">
+                <small>
+                  Password is required.
+                </small>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              class="btn btn-primary w-100"
+              [disabled]="loginForm.invalid || loading">
+              <span
+                *ngIf="loading"
+                class="spinner-border spinner-border-sm me-2">
+              </span>
+              {{ loading ? 'Logging in...' : 'Login' }}
+            </button>
+          </form>
+
+          <div class="text-center mt-3">
+            Don't have an account?
+            <a routerLink="/signup">Sign Up</a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
