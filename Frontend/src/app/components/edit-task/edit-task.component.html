@@ -1,177 +1,379 @@
 <div class="container mt-4">
-  <div class="card shadow-sm" *ngIf="!loading">
-    <div class="card-body">
-      <div class="d-flex justify-content-between align-items-center mb-4">
-        <h3 class="mb-0">Edit Task</h3>
-
-        <button
-          type="button"
-          class="btn btn-outline-secondary"
-          (click)="cancel()"
-        >
-          Back
-        </button>
-      </div>
-
-      <form #taskForm="ngForm" (ngSubmit)="updateTask()">
-        <!-- Title -->
-        <div class="mb-3">
-          <label class="form-label"> Task Title </label>
-
-          <input
-            type="text"
-            class="form-control"
-            name="title"
-            [(ngModel)]="task.title"
-            #title="ngModel"
-            required
-            minlength="3"
-            maxlength="100"
-          />
-
-          <div
-            class="text-danger mt-1"
-            *ngIf="title.invalid && (title.dirty || title.touched)"
-          >
-            <small *ngIf="title.errors?.['required']">
-              Title is required.
-            </small>
-
-            <small *ngIf="title.errors?.['minlength']">
-              Title must contain at least 3 characters.
-            </small>
-          </div>
-        </div>
-
-        <!-- Description -->
-        <div class="mb-3">
-          <label class="form-label"> Description </label>
-
-          <textarea
-            class="form-control"
-            rows="4"
-            name="description"
-            [(ngModel)]="task.description"
-          ></textarea>
-        </div>
-
-        <div class="row">
-          <!-- Status -->
-          <div class="col-md-4 mb-3">
-            <label class="form-label"> Status </label>
-
-            <select class="form-select" name="status" [(ngModel)]="task.status">
-              <option value="TODO">To Do</option>
-
-              <option value="IN_PROGRESS">In Progress</option>
-
-              <option value="COMPLETED">Completed</option>
-            </select>
-          </div>
-
-          <!-- Priority -->
-          <div class="col-md-4 mb-3">
-            <label class="form-label"> Priority </label>
-
-            <select
-              class="form-select"
-              name="priority"
-              [(ngModel)]="task.priority"
-            >
-              <option value="URGENT">Urgent</option>
-
-              <option value="HIGH">High</option>
-
-              <option value="MEDIUM">Medium</option>
-
-              <option value="LOW">Low</option>
-            </select>
-          </div>
-
-          <!-- Due Date -->
-          <div class="col-md-4 mb-3">
-            <label class="form-label"> Due Date </label>
-
-            <input
-              type="date"
-              class="form-control"
-              name="dueDate"
-              [(ngModel)]="task.dueDate"
-            />
-          </div>
-        </div>
-
-        <!-- Category -->
-        <div class="mb-3">
-          <label class="form-label"> Category </label>
-
-          <select
-            class="form-select"
-            name="category"
-            [(ngModel)]="task.category"
-          >
-            <option value="Other">Other</option>
-
-            <option value="Work">Work</option>
-
-            <option value="Study">Study</option>
-
-            <option value="Personal">Personal</option>
-
-            <option value="Project">Project</option>
-          </select>
-        </div>
-
-        <!-- Tags -->
-        <!-- Tags -->
-        <div class="mb-4">
-          <label class="form-label"> Tags </label>
-
-          <input
-            type="text"
-            class="form-control"
-            name="tags"
-            [(ngModel)]="tagsInput"
-            placeholder="Angular, Project, Urgent"
-          />
-
-          <small class="text-muted">
-            Separate multiple tags using commas.
-          </small>
-        </div>
-
-        <!-- Actions -->
-        <div class="d-flex gap-2">
-          <button
-            type="submit"
-            class="btn btn-primary"
-            [disabled]="taskForm.invalid || saving"
-          >
-            <span
-              *ngIf="saving"
-              class="spinner-border spinner-border-sm me-2"
-            ></span>
-
-            {{ saving ? "Saving..." : "Save Changes" }}
-          </button>
-
-          <button
-            type="button"
-            class="btn btn-secondary"
-            (click)="cancel()"
-            [disabled]="saving"
-          >
-            Cancel
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
 
   <!-- Loading -->
-  <div class="text-center mt-5" *ngIf="loading">
-    <div class="spinner-border text-primary"></div>
 
-    <p class="mt-2 text-muted">Loading task...</p>
+  <div
+    *ngIf="loading"
+    class="text-center py-5"
+  >
+
+    <div
+      class="spinner-border text-primary"
+      role="status"
+    ></div>
+
+    <p class="text-muted mt-2">
+      Loading task...
+    </p>
+
   </div>
+
+
+  <!-- Edit Form -->
+
+  <div
+    *ngIf="!loading"
+  >
+
+    <!-- Header -->
+
+    <div class="mb-4">
+
+      <button
+        type="button"
+        class="btn btn-link p-0 text-decoration-none mb-2"
+        (click)="cancel()"
+      >
+        <i class="fa-solid fa-arrow-left me-1"></i>
+        Back to Task
+      </button>
+
+      <h4 class="mb-1">
+        <i class="fa-solid fa-pen-to-square me-2"></i>
+        Edit Task
+      </h4>
+
+      <p class="text-muted mb-0">
+        Update the details of your task.
+      </p>
+
+    </div>
+
+
+    <!-- Card -->
+
+    <div class="card edit-task-card shadow-sm">
+
+      <div class="card-body p-4">
+
+        <form
+          #editTaskForm="ngForm"
+          (ngSubmit)="updateTask()"
+        >
+
+
+          <!-- ======================
+               Title
+          ======================= -->
+
+          <div class="mb-4">
+
+            <label
+              for="title"
+              class="form-label fw-semibold"
+            >
+              Title
+              <span class="text-danger">*</span>
+            </label>
+
+            <input
+              type="text"
+              id="title"
+              name="title"
+              class="form-control"
+              [(ngModel)]="task.title"
+              #title="ngModel"
+              required
+              minlength="3"
+              maxlength="100"
+              placeholder="Enter task title"
+            >
+
+            <div
+              *ngIf="
+                title.invalid &&
+                (title.dirty || title.touched)
+              "
+              class="text-danger small mt-1"
+            >
+
+              <span
+                *ngIf="title.errors?.['required']"
+              >
+                Title is required.
+              </span>
+
+              <span
+                *ngIf="title.errors?.['minlength']"
+              >
+                Title must contain at least 3 characters.
+              </span>
+
+            </div>
+
+            <div
+              class="text-muted small text-end mt-1"
+            >
+              {{ task.title.length || 0 }}/100
+            </div>
+
+          </div>
+
+
+          <!-- ======================
+               Description
+          ======================= -->
+
+          <div class="mb-4">
+
+            <label
+              for="description"
+              class="form-label fw-semibold"
+            >
+              Description
+            </label>
+
+            <textarea
+              id="description"
+              name="description"
+              class="form-control"
+              rows="5"
+              maxlength="1000"
+              [(ngModel)]="task.description"
+              placeholder="Enter task description"
+            ></textarea>
+
+            <div
+              class="text-muted small text-end mt-1"
+            >
+              {{ task.description?.length || 0 }}/1000
+            </div>
+
+          </div>
+
+
+          <!-- ======================
+               Status
+          ======================= -->
+
+          <div class="row g-3 mb-4">
+
+
+            <div class="col-md-6">
+
+              <label
+                for="status"
+                class="form-label fw-semibold"
+              >
+                Status
+              </label>
+
+              <select
+                id="status"
+                name="status"
+                class="form-select"
+                [(ngModel)]="task.status"
+              >
+
+                <option value="TODO">
+                  To Do
+                </option>
+
+                <option value="IN_PROGRESS">
+                  In Progress
+                </option>
+
+                <option value="COMPLETED">
+                  Completed
+                </option>
+
+              </select>
+
+            </div>
+
+
+            <!-- Priority -->
+
+            <div class="col-md-6">
+
+              <label
+                for="priority"
+                class="form-label fw-semibold"
+              >
+                Priority
+              </label>
+
+              <select
+                id="priority"
+                name="priority"
+                class="form-select"
+                [(ngModel)]="task.priority"
+              >
+
+                <option value="LOW">
+                  Low
+                </option>
+
+                <option value="MEDIUM">
+                  Medium
+                </option>
+
+                <option value="HIGH">
+                  High
+                </option>
+
+                <option value="URGENT">
+                  Urgent
+                </option>
+
+              </select>
+
+            </div>
+
+          </div>
+
+
+          <!-- ======================
+               Category + Due Date
+          ======================= -->
+
+          <div class="row g-3 mb-4">
+
+
+            <!-- Category -->
+
+            <div class="col-md-6">
+
+              <label
+                for="category"
+                class="form-label fw-semibold"
+              >
+                Category
+              </label>
+
+              <select
+                id="category"
+                name="category"
+                class="form-select"
+                [(ngModel)]="task.category"
+              >
+
+                <option
+                  *ngFor="
+                    let category of categories
+                  "
+                  [value]="category"
+                >
+                  {{ category }}
+                </option>
+
+              </select>
+
+            </div>
+
+
+            <!-- Due Date -->
+
+            <div class="col-md-6">
+
+              <label
+                for="dueDate"
+                class="form-label fw-semibold"
+              >
+                Due Date
+              </label>
+
+              <input
+                type="date"
+                id="dueDate"
+                name="dueDate"
+                class="form-control"
+                [(ngModel)]="task.dueDate"
+              >
+
+            </div>
+
+          </div>
+
+
+          <!-- ======================
+               Tags
+          ======================= -->
+
+          <div class="mb-4">
+
+            <label
+              for="tags"
+              class="form-label fw-semibold"
+            >
+              Tags
+            </label>
+
+            <input
+              type="text"
+              id="tags"
+              name="tags"
+              class="form-control"
+              [(ngModel)]="tagsInput"
+              placeholder="e.g. angular, frontend, urgent"
+            >
+
+            <div class="form-text">
+              Separate multiple tags using commas.
+            </div>
+
+          </div>
+
+
+          <!-- ======================
+               Buttons
+          ======================= -->
+
+          <div
+            class="d-flex justify-content-end gap-2 pt-3 border-top"
+          >
+
+            <button
+              type="button"
+              class="btn btn-outline-secondary"
+              (click)="cancel()"
+              [disabled]="saving"
+            >
+              Cancel
+            </button>
+
+
+            <button
+              type="submit"
+              class="btn btn-primary"
+              [disabled]="
+                saving ||
+                editTaskForm.invalid
+              "
+            >
+
+              <span
+                *ngIf="saving"
+                class="spinner-border spinner-border-sm me-2"
+              ></span>
+
+              <i
+                *ngIf="!saving"
+                class="fa-solid fa-floppy-disk me-1"
+              ></i>
+
+              Save Changes
+
+            </button>
+
+          </div>
+
+        </form>
+
+      </div>
+
+    </div>
+
+  </div>
+
 </div>

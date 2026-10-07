@@ -1,0 +1,224 @@
+/* =========================
+   Main Card
+========================= */
+
+.task-details-card {
+  border: 1px solid #e5e7eb;
+
+  border-radius: 12px;
+
+  overflow: hidden;
+}
+
+
+/* =========================
+   Title
+========================= */
+
+.task-title {
+  font-size: 1.7rem;
+
+  font-weight: 600;
+
+  color: #212529;
+
+  word-break: break-word;
+}
+
+
+/* =========================
+   Section
+========================= */
+
+.details-section {
+  padding: 5px 0;
+}
+
+.section-title {
+  color: #495057;
+
+  font-size: 0.95rem;
+
+  font-weight: 600;
+
+  margin-bottom: 15px;
+}
+
+
+/* =========================
+   Description
+========================= */
+
+.description {
+  white-space: pre-wrap;
+
+  word-break: break-word;
+
+  overflow-wrap: break-word;
+
+  color: #495057;
+
+  line-height: 1.7;
+
+  font-size: 0.95rem;
+}
+
+
+/* =========================
+   Info
+========================= */
+
+.info-label {
+  color: #6c757d;
+
+  font-size: 0.75rem;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.4px;
+
+  margin-bottom: 5px;
+}
+
+.info-value {
+  color: #343a40;
+
+  font-size: 0.9rem;
+
+  font-weight: 500;
+}
+
+
+/* =========================
+   Status
+========================= */
+
+.status-badge {
+  display: inline-block;
+
+  padding: 5px 9px;
+
+  border-radius: 6px;
+
+  font-size: 0.75rem;
+
+  font-weight: 600;
+}
+
+.status-todo {
+  background: #e9ecef;
+
+  color: #495057;
+}
+
+.status-progress {
+  background: #fff3cd;
+
+  color: #664d03;
+}
+
+.status-completed {
+  background: #d1e7dd;
+
+  color: #0f5132;
+}
+
+.status-default {
+  background: #e9ecef;
+
+  color: #495057;
+}
+
+
+/* =========================
+   Priority
+========================= */
+
+.priority-badge {
+  display: inline-block;
+
+  padding: 5px 9px;
+
+  border-radius: 6px;
+
+  font-size: 0.75rem;
+
+  font-weight: 600;
+}
+
+.priority-low {
+  background: #d1e7dd;
+
+  color: #0f5132;
+}
+
+.priority-medium {
+  background: #cfe2ff;
+
+  color: #084298;
+}
+
+.priority-high {
+  background: #fff3cd;
+
+  color: #664d03;
+}
+
+.priority-urgent {
+  background: #f8d7da;
+
+  color: #842029;
+}
+
+.priority-default {
+  background: #e9ecef;
+
+  color: #495057;
+}
+
+
+/* =========================
+   Tags
+========================= */
+
+.tag {
+  display: inline-block;
+
+  padding: 5px 9px;
+
+  border-radius: 6px;
+
+  background: #f8f9fa;
+
+  border: 1px solid #dee2e6;
+
+  color: #495057;
+
+  font-size: 0.8rem;
+}
+
+
+/* =========================
+   Buttons
+========================= */
+
+.btn {
+  border-radius: 8px;
+}
+
+
+/* =========================
+   Mobile
+========================= */
+
+@media (max-width: 575px) {
+
+  .task-details-card .card-body {
+    padding: 20px !important;
+  }
+
+  .task-title {
+    font-size: 1.4rem;
+  }
+
+}

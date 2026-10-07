@@ -1,0 +1,55 @@
+/* =========================
+   Card
+========================= */
+
+.edit-task-card {
+  border: 1px solid #e5e7eb;
+
+  border-radius: 12px;
+}
+
+
+/* =========================
+   Form Controls
+========================= */
+
+.form-control,
+.form-select {
+  border-radius: 8px;
+}
+
+.form-control:focus,
+.form-select:focus {
+  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.1);
+}
+
+
+/* =========================
+   Textarea
+========================= */
+
+textarea {
+  resize: vertical;
+}
+
+
+/* =========================
+   Buttons
+========================= */
+
+.btn {
+  border-radius: 8px;
+}
+
+
+/* =========================
+   Mobile
+========================= */
+
+@media (max-width: 575px) {
+
+  .edit-task-card .card-body {
+    padding: 20px !important;
+  }
+
+}
