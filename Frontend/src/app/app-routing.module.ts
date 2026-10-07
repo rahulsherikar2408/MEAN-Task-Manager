@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { TaskListComponent } from './components/task-list/task-list.component';
@@ -9,18 +8,19 @@ import { TaskDetailsComponent } from './components/task-details/task-details.com
 import { EditTaskComponent } from './components/edit-task/edit-task.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { authGuard } from './guards/auth.guard';
+import { AddTaskComponent } from './components/add-task/add-task.component';
 
 const routes: Routes = [
   {
     path: '',
     component: DashboardComponent,
-    canActivate: [authGuard]
+    canActivate: [authGuard],
   },
   {
-    path: 'home',
-    component: HomeComponent,
+    path: 'task/new',
+    component: AddTaskComponent,
+    canActivate: [authGuard],
   },
-
   {
     path: 'my-tasks',
     component: TaskListComponent,

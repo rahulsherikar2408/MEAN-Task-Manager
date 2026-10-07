@@ -57,7 +57,7 @@ export class DashboardComponent implements OnInit {
   }
 
   createTask(): void {
-    this.router.navigate(['/home']);
+    this.router.navigate(['/task/new']);
   }
 
   getCompletionPercentage(): number {

@@ -15,11 +15,6 @@ import { TaskListComponent } from './components/task-list/task-list.component';
 import { TaskItemComponent } from './components/task-item/task-item.component';
 import { EditTaskComponent } from './components/edit-task/edit-task.component';
 import { TaskDetailsComponent } from './components/task-details/task-details.component';
-import { HomeComponent } from './pages/home/home.component';
-
-import { SearchTaskPipe } from './pipes/search-task.pipe';
-import { FilterTaskPipe } from './pipes/filter-task.pipe';
-import { PriorityFilterPipe } from './pipes/priority-filter.pipe';
 
 import { LoginComponent } from './components/login/login.component';
 import { SignupComponent } from './components/signup/signup.component';
@@ -34,10 +29,6 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
     AddTaskComponent,
     TaskListComponent,
     TaskItemComponent,
-    HomeComponent,
-    SearchTaskPipe,
-    FilterTaskPipe,
-    PriorityFilterPipe,
     LoginComponent,
     SignupComponent,
     EditTaskComponent,

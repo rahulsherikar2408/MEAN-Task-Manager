@@ -1,0 +1,16 @@
+.card {
+  border-radius: 12px;
+}
+
+.form-control,
+.form-select {
+  border-radius: 8px;
+}
+
+textarea {
+  resize: vertical;
+}
+
+.btn {
+  border-radius: 8px;
+}

@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+
 import { ToastrService } from 'ngx-toastr';
 
 import { TaskService } from '../../services/task.service';
@@ -7,88 +9,150 @@ import { Task } from '../../models/task';
 @Component({
   selector: 'app-add-task',
   templateUrl: './add-task.component.html',
-  styleUrls: ['./add-task.component.css']
+  styleUrls: ['./add-task.component.css'],
 })
 export class AddTaskComponent {
+  // =========================
+  // Task
+  // =========================
 
-  title = '';
+  task: Task = {
+    title: '',
+    description: '',
+    status: 'TODO',
+    priority: 'MEDIUM',
+    dueDate: null,
+    category: 'Other',
+    tags: [],
+  };
 
-  description = '';
+  // =========================
+  // Tags Input
+  // =========================
 
-  priority: Task['priority'] = 'MEDIUM';
+  tagsInput = '';
 
-  dueDate = '';
+  // =========================
+  // Loading
+  // =========================
 
-  category = 'Other';
+  loading = false;
 
-  tags = '';
+  // =========================
+  // Categories
+  // =========================
+
+  categories = ['Work', 'Study', 'Personal', 'Project', 'Other'];
 
   constructor(
     private taskService: TaskService,
-    private toastr: ToastrService
+    private router: Router,
+    private toastr: ToastrService,
   ) {}
 
-  addTask(): void {
+  // =========================
+  // Add Task
+  // =========================
 
-    if (!this.title.trim() || !this.dueDate) {
+  addTask(): void {
+    // Remove unnecessary spaces
+
+    this.task.title = this.task.title.trim();
+
+    this.task.description = this.task.description.trim();
+
+    // =========================
+    // Title Validation
+    // =========================
+
+    if (!this.task.title) {
+      this.toastr.warning('Please enter a task title.', 'Validation');
+
       return;
     }
 
-    const task: Task = {
+    if (this.task.title.length < 3) {
+      this.toastr.warning(
+        'Task title must contain at least 3 characters.',
+        'Validation',
+      );
 
-      title: this.title.trim(),
+      return;
+    }
 
-      description: this.description.trim(),
+    if (this.task.title.length > 100) {
+      this.toastr.warning(
+        'Task title cannot exceed 100 characters.',
+        'Validation',
+      );
 
-      status: 'TODO',
+      return;
+    }
 
-      priority: this.priority,
+    // =========================
+    // Description Validation
+    // =========================
 
-      dueDate: this.dueDate,
+    if (this.task.description.length > 1000) {
+      this.toastr.warning(
+        'Description cannot exceed 1000 characters.',
+        'Validation',
+      );
 
-      category: this.category,
+      return;
+    }
 
-      tags: this.tags
-        .split(',')
-        .map(tag => tag.trim())
-        .filter(tag => tag.length > 0)
-    };
+    // =========================
+    // Tags
+    // =========================
 
-    this.taskService.addTask(task).subscribe({
+    this.task.tags = this.tagsInput
+      .split(',')
+      .map((tag) => tag.trim())
+      .filter((tag) => tag.length > 0);
 
+    // Remove duplicate tags
+
+    this.task.tags = [...new Set(this.task.tags)];
+
+    // =========================
+    // Loading
+    // =========================
+
+    this.loading = true;
+
+    // =========================
+    // API Call
+    // =========================
+
+    this.taskService.addTask(this.task).subscribe({
       next: () => {
+        this.loading = false;
 
-        this.toastr.success(
-          'Task added successfully!',
-          'Success'
-        );
+        this.toastr.success('Task created successfully.', 'Success');
 
-        this.resetForm();
+        // Go to My Tasks
+
+        this.router.navigate(['/my-tasks']);
       },
 
-      error: (err) => {
+      error: (error) => {
+        console.error('Add Task Error:', error);
 
-        this.toastr.error(
-          err.error?.message || 'Something went wrong',
-          'Error'
-        );
-      }
+        this.loading = false;
 
+        const message = error?.error?.message || 'Unable to create task.';
+
+        this.toastr.error(message, 'Error');
+      },
     });
   }
 
-  private resetForm(): void {
+  // =========================
+  // Cancel
+  // =========================
 
-    this.title = '';
-
-    this.description = '';
-
-    this.priority = 'MEDIUM';
-
-    this.dueDate = '';
-
-    this.category = 'Other';
-
-    this.tags = '';
+  cancel(): void {
+    this.router.navigate(['/']);
   }
 }
