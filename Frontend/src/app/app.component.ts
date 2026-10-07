@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { TodoService } from './services/todo.service';
 import { LoadingService } from './services/loading.service';
+import { TaskService } from './services/task.service';
 
 @Component({
   selector: 'app-root',
@@ -12,13 +12,13 @@ export class AppComponent implements OnInit {
   isLoading$ = this.loadingService.loading$;
 
   constructor(
-    private todoService: TodoService,
+    private taskService: TaskService,
     private loadingService: LoadingService
   ) {}
 
   ngOnInit(): void {
 
-    this.todoService.getTodos().subscribe({
+    this.taskService.getTasks().subscribe({
 
       next: () => {
         // Backend is available

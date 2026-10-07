@@ -7,12 +7,13 @@ import {
   User,
 } from '../models/auth';
 import { Observable, tap } from 'rxjs';
+import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private url = 'http://localhost:8000/api/auth';
+  private url = `${environment.apiUrl}/api/auth`;
 
   constructor(private http: HttpClient) {}
 

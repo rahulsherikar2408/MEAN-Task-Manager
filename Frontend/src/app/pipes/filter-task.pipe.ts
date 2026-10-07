@@ -6,22 +6,22 @@ import {
 import { Task } from '../models/task';
 
 @Pipe({
-  name: 'priorityFilter'
+  name: 'filterTask'
 })
-export class PriorityFilterPipe
+export class FilterTaskPipe
   implements PipeTransform {
 
   transform(
     tasks: Task[],
-    priority: string
+    filter: string
   ): Task[] {
 
-    if (!priority || priority === 'All') {
+    if (!filter || filter === 'All') {
       return tasks;
     }
 
     return tasks.filter(
-      task => task.priority === priority
+      task => task.status === filter
     );
   }
 }

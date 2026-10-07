@@ -1,21 +1,23 @@
 <div class="container mt-4">
+
   <div class="card mb-3">
+
     <div class="card-body">
 
       <!-- Heading -->
       <h4 class="mb-3">
-        {{ isHomePage ? "Recent Todos" : "My-Todos" }}
+        {{ isHomePage ? 'Recent Tasks' : 'My Tasks' }}
       </h4>
 
 
       <!-- Search & Filters -->
       <div *ngIf="!isHomePage">
 
-        <!-- Search Todo -->
+        <!-- Search -->
         <input
           type="text"
           class="form-control mb-3"
-          placeholder="Search Todo"
+          placeholder="Search Task"
           [(ngModel)]="searchText"
         />
 
@@ -23,8 +25,8 @@
         <!-- Filters -->
         <div class="row mb-4">
 
-          <!-- Status Filter -->
-          <div class="col-md-4 mb-2">
+          <!-- Status -->
+          <div class="col-md-6 mb-2">
 
             <div class="btn-group w-100">
 
@@ -40,26 +42,41 @@
                 All
               </button>
 
-              <button
-                class="btn"
-                [ngClass]="
-                  filter === 'Pending'
-                    ? 'btn-warning'
-                    : 'btn-outline-warning'
-                "
-                (click)="filter = 'Pending'"
-              >
-                Pending
-              </button>
 
               <button
                 class="btn"
                 [ngClass]="
-                  filter === 'Completed'
+                  filter === 'TODO'
+                    ? 'btn-warning'
+                    : 'btn-outline-warning'
+                "
+                (click)="filter = 'TODO'"
+              >
+                To Do
+              </button>
+
+
+              <button
+                class="btn"
+                [ngClass]="
+                  filter === 'IN_PROGRESS'
+                    ? 'btn-primary'
+                    : 'btn-outline-primary'
+                "
+                (click)="filter = 'IN_PROGRESS'"
+              >
+                In Progress
+              </button>
+
+
+              <button
+                class="btn"
+                [ngClass]="
+                  filter === 'COMPLETED'
                     ? 'btn-success'
                     : 'btn-outline-success'
                 "
-                (click)="filter = 'Completed'"
+                (click)="filter = 'COMPLETED'"
               >
                 Completed
               </button>
@@ -69,17 +86,34 @@
           </div>
 
 
-          <!-- Priority Filter -->
+          <!-- Priority -->
           <div class="col-md-4 mb-2">
 
             <select
               class="form-select"
               [(ngModel)]="priority"
             >
-              <option value="All">All Priorities</option>
-              <option value="High">High</option>
-              <option value="Medium">Medium</option>
-              <option value="Low">Low</option>
+
+              <option value="All">
+                All Priorities
+              </option>
+
+              <option value="URGENT">
+                Urgent
+              </option>
+
+              <option value="HIGH">
+                High
+              </option>
+
+              <option value="MEDIUM">
+                Medium
+              </option>
+
+              <option value="LOW">
+                Low
+              </option>
+
             </select>
 
           </div>
@@ -90,16 +124,25 @@
 
 
       <!-- ========================= -->
-      <!-- Home Page: Recent Todos -->
+      <!-- Home Page -->
       <!-- ========================= -->
 
       <div *ngIf="isHomePage">
 
-        <!-- Todos Found -->
-        <div *ngIf="todos.length > 0; else noTodos">
+        <div
+          *ngIf="tasks.length > 0; else noTasks"
+        >
 
-          <div *ngFor="let todo of todos | slice: 0 : 5">
-            <app-todo-item [todo]="todo"></app-todo-item>
+          <div
+            *ngFor="
+              let task of tasks | slice:0:5
+            "
+          >
+
+            <app-task-item
+              [task]="task"
+            ></app-task-item>
+
           </div>
 
         </div>
@@ -108,33 +151,36 @@
 
 
       <!-- ========================= -->
-      <!-- My-Todos Page -->
+      <!-- My Tasks -->
       <!-- ========================= -->
 
       <div *ngIf="!isHomePage">
 
-        <!-- Filtered Todos Found -->
         <div
           *ngIf="
             (
-              todos
-              | searchTodo: searchText
-              | filterTodo: filter
+              tasks
+              | searchTask: searchText
+              | filterTask: filter
               | priorityFilter: priority
             ).length > 0;
-            else noTodos
+            else noTasks
           "
         >
 
           <div
             *ngFor="
-              let todo of todos
-                | searchTodo: searchText
-                | filterTodo: filter
+              let task of tasks
+                | searchTask: searchText
+                | filterTask: filter
                 | priorityFilter: priority
             "
           >
-            <app-todo-item [todo]="todo"></app-todo-item>
+
+            <app-task-item
+              [task]="task"
+            ></app-task-item>
+
           </div>
 
         </div>
@@ -142,18 +188,17 @@
       </div>
 
 
-      <!-- ========================= -->
-      <!-- No Todos Message -->
-      <!-- ========================= -->
-
-      <ng-template #noTodos>
+      <!-- No Tasks -->
+      <ng-template #noTasks>
 
         <div class="text-center py-2">
 
-          <i class="fa-regular fa-circle-xmark fa-2x text-secondary mb-3"></i>
+          <i
+            class="fa-regular fa-circle-xmark fa-2x text-secondary mb-3"
+          ></i>
 
           <h5 class="text-secondary">
-            No todos found.
+            No tasks found.
           </h5>
 
           <p class="text-muted mb-0">
@@ -165,5 +210,7 @@
       </ng-template>
 
     </div>
+
   </div>
+
 </div>
