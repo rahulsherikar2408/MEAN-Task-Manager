@@ -1,28 +1,15 @@
 <div class="card mt-3">
-
   <div class="card-body">
-
     <div class="d-flex justify-content-between">
-
       <div>
-
-        <h5
-          [class.text-decoration-line-through]="
-            task.status === 'COMPLETED'
-          "
-        >
+        <h5 [class.text-decoration-line-through]="task.status === 'COMPLETED'">
           {{ task.title }}
         </h5>
 
-
         <!-- Description -->
-        <p
-          class="text-muted mb-2"
-          *ngIf="task.description"
-        >
+        <p class="text-muted mb-2" *ngIf="task.description">
           {{ task.description }}
         </p>
-
 
         <!-- Priority -->
         <span
@@ -31,12 +18,11 @@
             'bg-success': task.priority === 'LOW',
             'bg-warning text-dark': task.priority === 'MEDIUM',
             'bg-danger': task.priority === 'HIGH',
-            'bg-dark': task.priority === 'URGENT'
+            'bg-dark': task.priority === 'URGENT',
           }"
         >
           {{ task.priority }}
         </span>
-
 
         <!-- Status -->
         <span
@@ -44,93 +30,69 @@
           [ngClass]="{
             'bg-secondary': task.status === 'TODO',
             'bg-primary': task.status === 'IN_PROGRESS',
-            'bg-success': task.status === 'COMPLETED'
+            'bg-success': task.status === 'COMPLETED',
           }"
         >
           {{
-            task.status === 'TODO'
-              ? 'To Do'
-              : task.status === 'IN_PROGRESS'
-                ? 'In Progress'
-                : 'Completed'
+            task.status === "TODO"
+              ? "To Do"
+              : task.status === "IN_PROGRESS"
+                ? "In Progress"
+                : "Completed"
           }}
         </span>
-
 
         <!-- Category -->
         <span class="badge bg-info text-dark me-2">
           {{ task.category }}
         </span>
 
-
         <!-- Due Date -->
-        <span
-          class="badge bg-primary"
-          *ngIf="task.dueDate"
-        >
-          Due: {{ task.dueDate | date:'mediumDate' }}
+        <span class="badge bg-primary" *ngIf="task.dueDate">
+          Due: {{ task.dueDate | date: "mediumDate" }}
         </span>
 
+        <span *ngIf="isOverdue()" class="badge bg-danger ms-2"> Overdue </span>
 
         <!-- Tags -->
-        <div
-          class="mt-2"
-          *ngIf="task.tags?.length"
-        >
-
+        <div class="mt-2" *ngIf="task.tags?.length">
           <span
             class="badge bg-light text-dark border me-1"
             *ngFor="let tag of task.tags"
           >
             #{{ tag }}
           </span>
-
         </div>
-
       </div>
-
 
       <!-- Actions -->
       <div class="btn-grp">
+        <div class="btn-group">
+          <button
+            class="btn btn-sm btn-outline-primary"
+            (click)="viewTask()"
+            title="View Task"
+          >
+            <i class="fa-solid fa-eye"></i>
+          </button>
 
-        <button
-          type="button"
-          class="btn btn-link p-0 me-4"
-          [ngClass]="
-            task.status === 'COMPLETED'
-              ? 'text-success'
-              : 'text-secondary'
-          "
-          (click)="toggleStatus()"
-          [title]="
-            task.status === 'COMPLETED'
-              ? 'Mark as To Do'
-              : 'Mark as Completed'
-          "
-        >
+          <button
+            class="btn btn-sm btn-outline-secondary"
+            (click)="editTask()"
+            title="Edit Task"
+          >
+            <i class="fa-solid fa-pen"></i>
+          </button>
 
-          <i
-            [ngClass]="
-              task.status === 'COMPLETED'
-                ? 'fa-solid fa-circle-check fa-lg'
-                : 'fa-regular fa-circle fa-lg'
-            "
-          ></i>
-
-        </button>
-
-
-        <button
-          class="btn btn-danger btn-sm"
-          (click)="deleteTask()"
-        >
-          Delete
-        </button>
-
+          <button
+            class="btn btn-sm btn-outline-danger"
+            (click)="deleteTask()"
+            title="Delete Task"
+          >
+            <i class="fa-solid fa-trash"></i>
+          </button>
+        </div>
       </div>
-
     </div>
-
   </div>
-
 </div>

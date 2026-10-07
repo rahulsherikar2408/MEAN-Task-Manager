@@ -6,7 +6,8 @@ import cors from "cors";
 import connectDB from "./config/db.js";
 
 import taskRoutes from "./routes/taskRoutes.js";
-import authRoutes from "./routes/authRoutes.js"
+import authRoutes from "./routes/authRoutes.js";
+import dashboardRoutes from "./routes/dashboardRoutes.js";
 
 import dns from 'node:dns';
 dns.setServers(['8.8.8.8', '1.1.1.1']);
@@ -25,6 +26,7 @@ app.use(express.json());
 // Todo Routes
 app.use("/api/tasks", taskRoutes);
 app.use('/api/auth', authRoutes);
+app.use("/api/dashboard", dashboardRoutes);
 
 app.get('/', (req, res) => {
     res.send("Todo API Running");

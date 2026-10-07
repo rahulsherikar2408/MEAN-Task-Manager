@@ -1,0 +1,41 @@
+.dashboard-card {
+  transition: transform 0.2s ease,
+              box-shadow 0.2s ease;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-3px);
+}
+
+.dashboard-icon {
+  width: 48px;
+  height: 48px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 12px;
+
+  font-size: 20px;
+}
+
+.task-row {
+  transition: background-color 0.2s ease;
+}
+
+.task-row:hover {
+  background-color: #f8f9fa;
+}
+
+.task-info {
+  cursor: pointer;
+}
+
+.task-info h6 {
+  transition: color 0.2s ease;
+}
+
+.task-info:hover h6 {
+  color: #0d6efd;
+}

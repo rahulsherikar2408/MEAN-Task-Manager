@@ -4,6 +4,7 @@ import {
     addTask,
     deleteTask,
     getTasks,
+    getTaskById,
     updateTask
 } from "../controllers/taskController.js";
 
@@ -14,6 +15,9 @@ const router = express.Router();
 
 // GET /api/tasks
 router.get("/", authMiddleware, getTasks);
+
+// Get one task
+router.get("/:id", authMiddleware, getTaskById);
 
 
 // POST /api/tasks

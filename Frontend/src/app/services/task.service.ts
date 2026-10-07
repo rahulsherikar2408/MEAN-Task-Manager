@@ -26,6 +26,11 @@ export class TaskService {
     return this.http.get<Task[]>(this.api);
   }
 
+  // Get one task
+  getTaskById(id: string): Observable<Task> {
+    return this.http.get<Task>(`${this.api}/${id}`);
+  }
+
   /*
    * Add a new task
    */
@@ -40,7 +45,7 @@ export class TaskService {
   /*
    * Update an existing task
    */
-  updateTask(id: string, task: Task): Observable<Task> {
+  updateTask(id: string, task: Partial<Task>): Observable<Task> {
     return this.http.put<Task>(
       `${this.api}/${id}`,
       task
