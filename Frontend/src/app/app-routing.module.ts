@@ -9,6 +9,7 @@ import { EditTaskComponent } from './components/edit-task/edit-task.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { authGuard } from './guards/auth.guard';
 import { AddTaskComponent } from './components/add-task/add-task.component';
+import { KanbanComponent } from './components/kanban/kanban.component';
 
 const routes: Routes = [
   {
@@ -36,6 +37,11 @@ const routes: Routes = [
   {
     path: 'tasks/:id',
     component: TaskDetailsComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'kanban',
+    component: KanbanComponent,
     canActivate: [authGuard],
   },
 

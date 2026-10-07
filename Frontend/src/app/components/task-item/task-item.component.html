@@ -48,14 +48,14 @@
         </span>
 
         <!-- Due Date -->
-        <span class="badge bg-primary" *ngIf="task.dueDate">
+        <span class="badge bg-primary me-2" *ngIf="task.dueDate">
           Due: {{ task.dueDate | date: "mediumDate" }}
         </span>
 
-        <span *ngIf="isOverdue()" class="badge bg-danger ms-2"> Overdue </span>
+        <span *ngIf="isOverdue()" class="badge bg-danger me-2"> Overdue </span>
 
         <!-- Tags -->
-        <div class="mt-2" *ngIf="task.tags?.length">
+        <div class="mt-1" *ngIf="task.tags?.length">
           <span
             class="badge bg-light text-dark border me-1"
             *ngFor="let tag of task.tags"

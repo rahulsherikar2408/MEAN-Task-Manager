@@ -22,6 +22,10 @@ import { SignupComponent } from './components/signup/signup.component';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { KanbanComponent } from './components/kanban/kanban.component';
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -34,6 +38,7 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
     EditTaskComponent,
     TaskDetailsComponent,
     DashboardComponent,
+    KanbanComponent,
   ],
 
   imports: [
@@ -46,6 +51,7 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
     HttpClientModule,
 
     BrowserAnimationsModule,
+    DragDropModule,
 
     ToastrModule.forRoot({
       positionClass: 'toast-top-right',

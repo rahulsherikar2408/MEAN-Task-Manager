@@ -1,0 +1,315 @@
+/* =========================
+   Kanban Board
+   ========================= */
+
+.kanban-board {
+  align-items: flex-start;
+}
+
+
+/* =========================
+   Kanban Column
+   ========================= */
+
+.kanban-column {
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 12px;
+  overflow: hidden;
+  min-height: 500px;
+}
+
+
+/* =========================
+   Column Header
+   ========================= */
+
+.kanban-header {
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.kanban-header h5 {
+  font-weight: 600;
+}
+
+.kanban-header small {
+  color: #6c757d;
+}
+
+
+/* =========================
+   Column Header Types
+   ========================= */
+
+.todo-header {
+  background: #f8f9fa;
+}
+
+.progress-header {
+  background: #fff8e1;
+}
+
+.completed-header {
+  background: #eaf7ee;
+}
+
+
+/* =========================
+   Drop List
+   ========================= */
+
+.kanban-list {
+  min-height: 420px;
+  padding: 12px;
+  transition: background-color 200ms ease;
+}
+
+
+/* =========================
+   Task Card
+   ========================= */
+
+.kanban-task {
+  position: relative;
+
+  display: flex;
+
+  background: #ffffff;
+
+  border: 1px solid #dee2e6;
+
+  border-radius: 10px;
+
+  padding: 14px;
+
+  margin-bottom: 10px;
+
+  cursor: move;
+
+  box-shadow:
+    0 2px 5px rgba(0, 0, 0, 0.05);
+
+  transition:
+    box-shadow 200ms ease,
+    transform 200ms ease;
+}
+
+
+.kanban-task:hover {
+  box-shadow:
+    0 5px 12px rgba(0, 0, 0, 0.1);
+}
+
+
+/* =========================
+   Drag Handle
+   ========================= */
+
+.task-drag-handle {
+  flex-shrink: 0;
+
+  color: #adb5bd;
+
+  margin-right: 10px;
+
+  cursor: grab;
+}
+
+
+.task-drag-handle:active {
+  cursor: grabbing;
+}
+
+
+/* =========================
+   Task Content
+   ========================= */
+
+.task-content {
+  flex: 1;
+  min-width: 0;
+}
+
+
+.task-title {
+  font-weight: 600;
+
+  margin-bottom: 5px;
+
+  overflow-wrap: anywhere;
+}
+
+
+.task-description {
+  color: #6c757d;
+
+  font-size: 0.9rem;
+
+  margin-bottom: 0;
+
+  display: -webkit-box;
+
+  -webkit-line-clamp: 3;
+
+  -webkit-box-orient: vertical;
+
+  overflow: hidden;
+}
+
+
+/* =========================
+   Due Date
+   ========================= */
+
+.task-due-date {
+  color: #6c757d;
+
+  font-size: 0.8rem;
+}
+
+
+/* =========================
+   Updating
+   ========================= */
+
+.kanban-task.updating {
+  opacity: 0.6;
+}
+
+
+/* =========================
+   Empty Column
+   ========================= */
+
+.empty-column {
+  min-height: 300px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: center;
+
+  align-items: center;
+
+  text-align: center;
+
+  color: #adb5bd;
+}
+
+
+.empty-column i {
+  font-size: 2rem;
+
+  margin-bottom: 12px;
+}
+
+
+.empty-column p {
+  margin-bottom: 4px;
+
+  font-weight: 500;
+}
+
+
+.empty-column small {
+  color: #adb5bd;
+}
+
+
+/* =========================
+   Drag Preview
+   ========================= */
+
+.drag-preview {
+  width: 300px;
+
+  background: #ffffff;
+
+  padding: 14px;
+
+  border-radius: 10px;
+
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.2);
+
+  cursor: grabbing;
+}
+
+
+/* =========================
+   Drag Placeholder
+   ========================= */
+
+.drag-placeholder {
+  min-height: 80px;
+
+  border: 2px dashed #adb5bd;
+
+  border-radius: 10px;
+
+  background: #f1f3f5;
+
+  margin-bottom: 10px;
+}
+
+
+/* =========================
+   CDK Animation
+   ========================= */
+
+.cdk-drag-animating {
+  transition:
+    transform 250ms
+    cubic-bezier(0, 0, 0.2, 1);
+}
+
+
+.kanban-list.cdk-drop-list-dragging
+.kanban-task:not(.cdk-drag-placeholder) {
+  transition:
+    transform 250ms
+    cubic-bezier(0, 0, 0.2, 1);
+}
+
+
+/* =========================
+   Responsive
+   ========================= */
+
+@media (max-width: 991px) {
+
+  .kanban-column {
+    min-height: 400px;
+  }
+
+  .kanban-list {
+    min-height: 300px;
+  }
+
+}
+
+
+@media (max-width: 575px) {
+
+  .kanban-header {
+    padding: 12px;
+  }
+
+  .kanban-list {
+    padding: 8px;
+  }
+
+  .kanban-task {
+    padding: 12px;
+  }
+
+  .drag-preview {
+    width: 250px;
+  }
+
+}
