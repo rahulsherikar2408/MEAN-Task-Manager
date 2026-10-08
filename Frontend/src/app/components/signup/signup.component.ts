@@ -14,6 +14,8 @@ export class SignupComponent {
   password = '';
   confirmPassword = '';
   loading = false;
+  showPassword = false;
+  showConfirmPassword = false;
 
   constructor(
     private authService: AuthService,
@@ -21,55 +23,51 @@ export class SignupComponent {
     private toastr: ToastrService,
   ) {}
 
-  signup(): void{
+  togglePasswordVisibility(): void {
+    this.showPassword = !this.showPassword;
+  }
+
+  toggleConfirmPasswordVisibility(): void {
+    this.showConfirmPassword = !this.showConfirmPassword;
+  }
+
+  signup(): void {
     if (
       !this.name.trim() ||
       !this.email.trim() ||
       !this.password ||
       !this.confirmPassword
     ) {
-
-      this.toastr.error(
-        'Please fill all fields.',
-        'Error'
-      );
-
+      this.toastr.error('Please fill in all fields.', 'Error');
       return;
     }
 
-    if(this.password !== this.confirmPassword){
-      this.toastr.error(
-        'Passwords do not match.',
-        'Error'
-      );
-
+    if (this.password !== this.confirmPassword) {
+      this.toastr.error('Passwords do not match.', 'Error');
       return;
     }
 
-    this.loading = true
+    this.loading = true;
 
-    this.authService.signup({
-      name: this.name.trim(),
-      email: this.email.trim(),
-      password: this.password
-    }).subscribe({
-      next: () => {
-        this.loading = false
-        this.toastr.success(
-          'Account created successfully!',
-          'Success'
-        );
-        this.router.navigate(['/']);
-      },
-      error: (err) => {
-        this.loading = false;
-        this.toastr.error(
-          err.error?.message || 'Signup failed.',
-          'Error'
-        );
-      }
-    });
-
+    this.authService
+      .signup({
+        name: this.name.trim(),
+        email: this.email.trim(),
+        password: this.password,
+      })
+      .subscribe({
+        next: () => {
+          this.loading = false;
+          this.toastr.success(
+            'Account created successfully! Welcome aboard.',
+            'Success',
+          );
+          this.router.navigate(['/']);
+        },
+        error: (err) => {
+          this.loading = false;
+          this.toastr.error(err.error?.message || 'Signup failed.', 'Error');
+        },
+      });
   }
-  
 }

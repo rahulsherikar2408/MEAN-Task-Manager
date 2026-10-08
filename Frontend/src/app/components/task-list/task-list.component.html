@@ -1,359 +1,308 @@
-<div class="container mt-4">
-  <!-- ========================= -->
-  <!-- Page Heading -->
-  <!-- ========================= -->
+<div class="app-container py-4">
+  <!-- Page Header -->
+  <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center mb-4 gap-3">
+    <div>
+      <h2 class="page-title mb-1">
+        <i class="fa-solid fa-list-check text-primary me-2"></i>
+        My Tasks
+      </h2>
+      <p class="page-subtitle">
+        Manage, filter and organize your work efficiently.
+      </p>
+    </div>
 
-  <div
-    class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center mb-3 gap-2"
-  >
-    <h4 class="mb-0">
-      <i class="fa-solid fa-list-check me-2"></i>
-
-      My Tasks
-    </h4>
-
-    <div class="d-flex gap-2">
-      <a routerLink="/kanban" class="btn btn-secondary">
-        <i class="fa-solid fa-table-columns me-1"></i>
-
-        Kanban
+    <div class="d-flex align-items-center gap-2">
+      <a routerLink="/kanban" class="btn btn-outline-secondary">
+        <i class="fa-solid fa-table-columns"></i>
+        <span>Kanban</span>
       </a>
-
       <a routerLink="/task/new" class="btn btn-primary">
-        <i class="fa-solid fa-plus me-1"></i>
-
-        Add Task
+        <i class="fa-solid fa-plus"></i>
+        <span>New Task</span>
       </a>
     </div>
   </div>
 
-  <div class="card mb-3">
-    <div class="card-body">
-      <!-- ========================= -->
-      <!-- Advanced Search & Filters -->
-      <!-- ========================= -->
-
-      <div class="card border-0 shadow-sm mb-4">
-        <div class="card-body">
-          <!-- Filter Header -->
-
-          <div class="d-flex justify-content-between align-items-center mb-3">
-            <h5 class="mb-0">
-              <i class="fa-solid fa-filter me-2"></i>
-
-              Search & Filters
-            </h5>
-
-            <button
-              type="button"
-              class="btn btn-sm btn-outline-secondary"
-              (click)="resetFilters()"
-            >
-              <i class="fa-solid fa-rotate-left me-1"></i>
-
-              Reset
-            </button>
-          </div>
-
-          <!-- ========================= -->
-          <!-- Search -->
-          <!-- ========================= -->
-
-          <div class="mb-3">
-            <label class="form-label"> Search </label>
-
-            <div class="input-group">
-              <span class="input-group-text">
-                <i class="fa-solid fa-search"></i>
-              </span>
-
-              <input
-                type="text"
-                class="form-control"
-                placeholder="Search title, description or tags..."
-                [(ngModel)]="searchText"
-                (ngModelChange)="onSearchChange()"
-              />
-            </div>
-
-            <small class="text-muted">
-              Search by task title, description or tags.
-            </small>
-          </div>
-
-          <!-- ========================= -->
-          <!-- Filters -->
-          <!-- ========================= -->
-
-          <div class="row g-3">
-            <!-- Status -->
-
-            <div class="col-12 col-md-6 col-lg-3">
-              <label class="form-label"> Status </label>
-
-              <select
-                class="form-select"
-                [(ngModel)]="statusFilter"
-                (change)="applyFilters()"
-              >
-                <option value="All">All Statuses</option>
-
-                <option value="TODO">To Do</option>
-
-                <option value="IN_PROGRESS">In Progress</option>
-
-                <option value="COMPLETED">Completed</option>
-              </select>
-            </div>
-
-            <!-- Priority -->
-
-            <div class="col-12 col-md-6 col-lg-3">
-              <label class="form-label"> Priority </label>
-
-              <select
-                class="form-select"
-                [(ngModel)]="priorityFilter"
-                (change)="applyFilters()"
-              >
-                <option value="All">All Priorities</option>
-
-                <option value="URGENT">Urgent</option>
-
-                <option value="HIGH">High</option>
-
-                <option value="MEDIUM">Medium</option>
-
-                <option value="LOW">Low</option>
-              </select>
-            </div>
-
-            <!-- Category -->
-
-            <div class="col-12 col-md-6 col-lg-3">
-              <label class="form-label"> Category </label>
-
-              <select
-                class="form-select"
-                [(ngModel)]="categoryFilter"
-                (change)="applyFilters()"
-              >
-                <option value="All">All Categories</option>
-
-                <option *ngFor="let category of categories" [value]="category">
-                  {{ category }}
-                </option>
-              </select>
-            </div>
-
-            <!-- Sort By -->
-
-            <div class="col-12 col-md-6 col-lg-3">
-              <label class="form-label"> Sort By </label>
-
-              <select
-                class="form-select"
-                [(ngModel)]="sortBy"
-                (change)="changeSort()"
-              >
-                <option value="createdAt">Created Date</option>
-
-                <option value="updatedAt">Recently Updated</option>
-
-                <option value="dueDate">Due Date</option>
-
-                <option value="title">Title</option>
-
-                <option value="priority">Priority</option>
-
-                <option value="status">Status</option>
-              </select>
-            </div>
-
-            <!-- Due From -->
-
-            <div class="col-12 col-md-6">
-              <label class="form-label"> Due From </label>
-
-              <input
-                type="date"
-                class="form-control"
-                [(ngModel)]="dueFrom"
-                (change)="applyFilters()"
-              />
-            </div>
-
-            <!-- Due To -->
-
-            <div class="col-12 col-md-6">
-              <label class="form-label"> Due To </label>
-
-              <input
-                type="date"
-                class="form-control"
-                [(ngModel)]="dueTo"
-                (change)="applyFilters()"
-              />
-            </div>
-
-            <!-- Sort Order -->
-
-            <div class="col-12 col-md-6">
-              <label class="form-label"> Sort Order </label>
-
-              <select
-                class="form-select"
-                [(ngModel)]="sortOrder"
-                (change)="changeSort()"
-              >
-                <option value="desc">Descending</option>
-
-                <option value="asc">Ascending</option>
-              </select>
-            </div>
-
-            <!-- Overdue -->
-
-            <div class="col-12 col-md-6 d-flex align-items-end">
-              <div class="form-check mb-2">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  id="overdueOnly"
-                  [(ngModel)]="overdueOnly"
-                  (change)="applyFilters()"
-                />
-
-                <label class="form-check-label" for="overdueOnly">
-                  Show overdue tasks only
-                </label>
-              </div>
-            </div>
-          </div>
+  <!-- Search & Filter Card -->
+  <div class="saas-card p-3 p-md-4 mb-4">
+    <!-- Main Filter Controls Row -->
+    <div class="row g-2 g-md-3 align-items-center">
+      <!-- Search Input -->
+      <div class="col-12 col-lg-4">
+        <div class="input-group">
+          <span class="input-group-text bg-white border-end-0">
+            <i class="fa-solid fa-magnifying-glass text-muted"></i>
+          </span>
+          <input
+            type="text"
+            class="form-control border-start-0 ps-0"
+            placeholder="Search tasks by title, description or tags..."
+            [(ngModel)]="searchText"
+            (ngModelChange)="onSearchChange()"
+          />
+          <button
+            *ngIf="searchText"
+            type="button"
+            class="btn btn-sm btn-outline-secondary border-start-0"
+            (click)="searchText = ''; onSearchChange()"
+            title="Clear search"
+          >
+            <i class="fa-solid fa-xmark"></i>
+          </button>
         </div>
       </div>
 
-      <!-- ========================= -->
-      <!-- Loading -->
-      <!-- ========================= -->
-
-      <div *ngIf="loading" class="text-center py-4">
-        <div class="spinner-border text-primary" role="status">
-          <span class="visually-hidden"> Loading... </span>
-        </div>
-
-        <p class="text-muted mt-2 mb-0">Loading tasks...</p>
+      <!-- Status Filter -->
+      <div class="col-6 col-sm-4 col-lg-2">
+        <select
+          class="form-select form-select-sm"
+          [(ngModel)]="statusFilter"
+          (change)="applyFilters()"
+          aria-label="Filter by Status"
+        >
+          <option value="All">All Statuses</option>
+          <option value="TODO">To Do</option>
+          <option value="IN_PROGRESS">In Progress</option>
+          <option value="COMPLETED">Completed</option>
+        </select>
       </div>
 
-      <!-- ========================= -->
-      <!-- Task Count -->
-      <!-- ========================= -->
-
-      <div
-        *ngIf="!loading && totalTasks > 0"
-        class="d-flex justify-content-between align-items-center mb-3"
-      >
-        <span class="text-muted">
-          <i class="fa-solid fa-list me-1"></i>
-
-          Showing
-
-          {{ tasks.length }}
-
-          of
-
-          {{ totalTasks }}
-
-          tasks
-        </span>
+      <!-- Priority Filter -->
+      <div class="col-6 col-sm-4 col-lg-2">
+        <select
+          class="form-select form-select-sm"
+          [(ngModel)]="priorityFilter"
+          (change)="applyFilters()"
+          aria-label="Filter by Priority"
+        >
+          <option value="All">All Priorities</option>
+          <option value="LOW">Low</option>
+          <option value="MEDIUM">Medium</option>
+          <option value="HIGH">High</option>
+          <option value="URGENT">Urgent</option>
+        </select>
       </div>
 
-      <!-- ========================= -->
-      <!-- My Tasks -->
-      <!-- ========================= -->
-
-      <div *ngIf="!loading && tasks.length > 0">
-        <div *ngFor="let task of tasks" class="mb-3">
-          <app-task-item [task]="task"></app-task-item>
-        </div>
+      <!-- Category Filter -->
+      <div class="col-6 col-sm-4 col-lg-2">
+        <select
+          class="form-select form-select-sm"
+          [(ngModel)]="categoryFilter"
+          (change)="applyFilters()"
+          aria-label="Filter by Category"
+        >
+          <option value="All">All Categories</option>
+          <option *ngFor="let category of categories" [value]="category">
+            {{ category }}
+          </option>
+        </select>
       </div>
 
-      <!-- ========================= -->
-      <!-- No Tasks -->
-      <!-- ========================= -->
-
-      <div *ngIf="!loading && tasks.length === 0" class="text-center py-4">
-        <i class="fa-regular fa-circle-xmark fa-2x text-secondary mb-3"></i>
-
-        <h5 class="text-secondary">No tasks found.</h5>
-
-        <p class="text-muted mb-3">
-          No tasks match your current search or filter criteria.
-        </p>
+      <!-- Actions: More Filters & Reset -->
+      <div class="col-6 col-sm-12 col-lg-2 d-flex justify-content-end gap-2">
+        <button
+          type="button"
+          class="btn btn-sm btn-outline-secondary w-100 position-relative"
+          (click)="toggleAdvancedFilters()"
+          [class.active]="showAdvancedFilters"
+        >
+          <i class="fa-solid fa-sliders me-1"></i>
+          <span>Sort & Dates</span>
+          <span
+            *ngIf="dueFrom || dueTo || overdueOnly || sortBy !== 'createdAt'"
+            class="position-absolute top-0 start-100 translate-middle p-1 bg-primary border border-light rounded-circle"
+          ></span>
+        </button>
 
         <button
+          *ngIf="hasActiveFilters()"
+          type="button"
+          class="btn btn-sm btn-outline-danger"
+          (click)="resetFilters()"
+          title="Reset all filters"
+        >
+          <i class="fa-solid fa-rotate-left"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Advanced Collapsible Filters -->
+    <div *ngIf="showAdvancedFilters" class="advanced-filters-panel mt-3 pt-3 border-top">
+      <div class="row g-3">
+        <!-- Sort By -->
+        <div class="col-12 col-sm-6 col-md-3">
+          <label class="form-label small text-muted">Sort By</label>
+          <select class="form-select form-select-sm" [(ngModel)]="sortBy" (change)="changeSort()">
+            <option value="createdAt">Date Created</option>
+            <option value="updatedAt">Recently Updated</option>
+            <option value="dueDate">Due Date</option>
+            <option value="title">Task Title</option>
+            <option value="priority">Priority</option>
+            <option value="status">Status</option>
+          </select>
+        </div>
+
+        <!-- Sort Order -->
+        <div class="col-12 col-sm-6 col-md-3">
+          <label class="form-label small text-muted">Order</label>
+          <select class="form-select form-select-sm" [(ngModel)]="sortOrder" (change)="changeSort()">
+            <option value="desc">Descending (Newest / High)</option>
+            <option value="asc">Ascending (Oldest / Low)</option>
+          </select>
+        </div>
+
+        <!-- Due From -->
+        <div class="col-12 col-sm-6 col-md-2">
+          <label class="form-label small text-muted">Due From</label>
+          <input
+            type="date"
+            class="form-control form-select-sm"
+            [(ngModel)]="dueFrom"
+            (change)="applyFilters()"
+          />
+        </div>
+
+        <!-- Due To -->
+        <div class="col-12 col-sm-6 col-md-2">
+          <label class="form-label small text-muted">Due To</label>
+          <input
+            type="date"
+            class="form-control form-select-sm"
+            [(ngModel)]="dueTo"
+            (change)="applyFilters()"
+          />
+        </div>
+
+        <!-- Overdue Checkbox -->
+        <div class="col-12 col-md-2 d-flex align-items-end">
+          <div class="form-check pb-1">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              id="overdueOnly"
+              [(ngModel)]="overdueOnly"
+              (change)="applyFilters()"
+            />
+            <label class="form-check-label small fw-medium text-slate-700" for="overdueOnly">
+              Overdue only
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading tasks...</span>
+    </div>
+    <p class="text-muted mt-2 small">Loading your tasks...</p>
+  </div>
+
+  <!-- Task Content -->
+  <div *ngIf="!loading">
+    <!-- Task Count & Meta Bar -->
+    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+      <div class="text-muted small">
+        <i class="fa-solid fa-layer-group me-1 text-primary"></i>
+        Showing <span class="fw-semibold text-slate-900">{{ tasks.length }}</span> of
+        <span class="fw-semibold text-slate-900">{{ totalTasks }}</span> total tasks
+      </div>
+
+      <div *ngIf="hasActiveFilters()" class="d-flex align-items-center gap-2">
+        <span class="badge bg-slate-100 text-slate-600 border small">Filters active</span>
+        <button
+          type="button"
+          class="btn btn-link btn-sm text-decoration-none p-0 text-muted"
+          (click)="resetFilters()"
+        >
+          Reset all
+        </button>
+      </div>
+    </div>
+
+    <!-- Task List -->
+    <div *ngIf="tasks.length > 0" class="task-list-wrapper d-flex flex-column gap-2 mb-4">
+      <div *ngFor="let task of tasks; let i = index">
+        <app-task-item [task]="task" [index]="i"></app-task-item>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="tasks.length === 0" class="empty-state saas-card my-4">
+      <div class="empty-state-icon">
+        <i class="fa-solid fa-list-check"></i>
+      </div>
+      <h5 class="empty-state-title">No tasks found</h5>
+      <p class="empty-state-desc">
+        {{
+          hasActiveFilters()
+            ? "No tasks match your current search or filter criteria. Try resetting filters."
+            : "You don't have any tasks in your workspace yet. Create your first task to get started!"
+        }}
+      </p>
+
+      <div class="d-flex justify-content-center gap-2">
+        <button
+          *ngIf="hasActiveFilters()"
           type="button"
           class="btn btn-outline-secondary btn-sm"
           (click)="resetFilters()"
         >
           <i class="fa-solid fa-rotate-left me-1"></i>
-
           Reset Filters
         </button>
+
+        <a routerLink="/task/new" class="btn btn-primary btn-sm">
+          <i class="fa-solid fa-plus me-1"></i>
+          Create Task
+        </a>
       </div>
+    </div>
 
-      <!-- ========================= -->
-      <!-- Pagination -->
-      <!-- ========================= -->
-
-      <div
-        *ngIf="!loading && totalPages > 0"
-        class="d-flex justify-content-center mt-4"
-      >
-        <nav aria-label="Task pagination">
-          <ul class="pagination mb-0">
-            <!-- Previous -->
-
-            <li class="page-item" [class.disabled]="currentPage === 1">
-              <button
-                type="button"
-                class="page-link"
-                (click)="previousPage()"
-                [disabled]="currentPage === 1"
-              >
-                <i class="fa-solid fa-chevron-left"></i>
-
-              </button>
-            </li>
-
-            <!-- Page Numbers -->
-
-            <li
-              *ngFor="let page of getPages()"
-              class="page-item"
-              [class.active]="page === currentPage"
+    <!-- Pagination Controls -->
+    <div *ngIf="totalPages > 1" class="d-flex justify-content-center mt-4">
+      <nav aria-label="Task pagination">
+        <ul class="pagination pagination-sm mb-0">
+          <!-- Previous -->
+          <li class="page-item" [class.disabled]="currentPage === 1">
+            <button
+              type="button"
+              class="page-link"
+              (click)="previousPage()"
+              [disabled]="currentPage === 1"
+              aria-label="Previous Page"
             >
-              <button type="button" class="page-link" (click)="goToPage(page)">
-                {{ page }}
-              </button>
-            </li>
+              <i class="fa-solid fa-chevron-left"></i>
+            </button>
+          </li>
 
-            <!-- Next -->
+          <!-- Page Numbers -->
+          <li
+            *ngFor="let page of getPages()"
+            class="page-item"
+            [class.active]="page === currentPage"
+          >
+            <button type="button" class="page-link" (click)="goToPage(page)">
+              {{ page }}
+            </button>
+          </li>
 
-            <li class="page-item" [class.disabled]="currentPage === totalPages">
-              <button
-                type="button"
-                class="page-link"
-                (click)="nextPage()"
-                [disabled]="currentPage === totalPages"
-              >
-
-                <i class="fa-solid fa-chevron-right"></i>
-              </button>
-            </li>
-          </ul>
-        </nav>
-      </div>
+          <!-- Next -->
+          <li class="page-item" [class.disabled]="currentPage === totalPages">
+            <button
+              type="button"
+              class="page-link"
+              (click)="nextPage()"
+              [disabled]="currentPage === totalPages"
+              aria-label="Next Page"
+            >
+              <i class="fa-solid fa-chevron-right"></i>
+            </button>
+          </li>
+        </ul>
+      </nav>
     </div>
   </div>
 </div>

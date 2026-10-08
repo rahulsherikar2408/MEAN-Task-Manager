@@ -12,8 +12,10 @@ import { TaskService } from '../../services/task.service';
 })
 export class TaskItemComponent {
   @Input() task!: Task;
-
   @Input() index!: number;
+
+  deleting = false;
+  toggling = false;
 
   constructor(
     private taskService: TaskService,
@@ -30,37 +32,61 @@ export class TaskItemComponent {
   }
 
   deleteTask(): void {
-    this.taskService.deleteTask(this.task._id!).subscribe({
-      next: () => {
-        this.toastr.success('Task deleted successfully!', 'Success');
-      },
+    if (!this.task._id) {
+      return;
+    }
 
-      error: () => {
-        this.toastr.error('Something went wrong', 'Error');
+    const confirmed = window.confirm(
+      `Are you sure you want to delete "${this.task.title}"? This action cannot be undone.`,
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    this.deleting = true;
+    this.taskService.deleteTask(this.task._id).subscribe({
+      next: () => {
+        this.deleting = false;
+        this.toastr.success('Task deleted successfully!', 'Success');
+        this.taskService.refreshTasks();
+      },
+      error: (error) => {
+        this.deleting = false;
+        console.error(error);
+        this.toastr.error('Something went wrong deleting the task.', 'Error');
       },
     });
   }
 
   toggleStatus(): void {
+    if (!this.task._id || this.toggling) {
+      return;
+    }
+
     const newStatus: Task['status'] =
       this.task.status === 'COMPLETED' ? 'TODO' : 'COMPLETED';
 
-    const updatedTask: Task = {
-      ...this.task,
-      status: newStatus,
-    };
+    this.toggling = true;
 
-    this.taskService.updateTask(this.task._id!, updatedTask).subscribe({
-      next: (task) => {
-        this.task = task;
-
-        this.toastr.success('Task status updated!', 'Success');
-      },
-
-      error: () => {
-        this.toastr.error('Something went wrong', 'Error');
-      },
-    });
+    this.taskService
+      .updateTask(this.task._id, {
+        status: newStatus,
+      })
+      .subscribe({
+        next: (updatedTask) => {
+          this.toggling = false;
+          this.task = updatedTask;
+          const label = newStatus === 'COMPLETED' ? 'completed' : 'moved to To Do';
+          this.toastr.success(`Task marked as ${label}!`, 'Success');
+          this.taskService.refreshTasks();
+        },
+        error: (error) => {
+          this.toggling = false;
+          console.error(error);
+          this.toastr.error('Failed to update task status.', 'Error');
+        },
+      });
   }
 
   isOverdue(): boolean {
@@ -69,13 +95,25 @@ export class TaskItemComponent {
     }
 
     const today = new Date();
-
-    const dueDate = new Date(this.task.dueDate);
-
     today.setHours(0, 0, 0, 0);
 
+    const dueDate = new Date(this.task.dueDate);
     dueDate.setHours(0, 0, 0, 0);
 
     return dueDate < today;
+  }
+
+  isDueToday(): boolean {
+    if (!this.task.dueDate || this.task.status === 'COMPLETED') {
+      return false;
+    }
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const dueDate = new Date(this.task.dueDate);
+    dueDate.setHours(0, 0, 0, 0);
+
+    return dueDate.getTime() === today.getTime();
   }
 }

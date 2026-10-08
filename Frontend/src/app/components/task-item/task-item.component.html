@@ -1,95 +1,165 @@
-<div class="card mt-3">
-  <div class="card-body">
-    <div class="d-flex justify-content-between">
-      <div>
-        <h5 [class.text-decoration-line-through]="task.status === 'COMPLETED'">
+<div
+  class="task-item-card saas-card p-3"
+  [class.task-item-completed]="task.status === 'COMPLETED'"
+  [class.task-item-overdue]="isOverdue()"
+>
+  <div class="d-flex align-items-start gap-3">
+    <!-- Status Toggle Checkbox Button -->
+    <button
+      type="button"
+      class="status-toggle-btn"
+      [class.checked]="task.status === 'COMPLETED'"
+      (click)="toggleStatus()"
+      [disabled]="toggling || deleting"
+      [title]="task.status === 'COMPLETED' ? 'Mark as incomplete' : 'Mark as complete'"
+      aria-label="Toggle task completion status"
+    >
+      <span *ngIf="toggling" class="spinner-border spinner-border-sm status-toggle-spinner"></span>
+      <i *ngIf="!toggling && task.status === 'COMPLETED'" class="fa-solid fa-check"></i>
+    </button>
+
+    <!-- Task Body / Details -->
+    <div class="flex-grow-1 min-w-0">
+      <!-- Title & Main Actions on Desktop -->
+      <div class="d-flex justify-content-between align-items-start gap-2 mb-1">
+        <a
+          [routerLink]="['/tasks', task._id]"
+          class="task-item-title text-decoration-none"
+          [class.completed-title]="task.status === 'COMPLETED'"
+        >
           {{ task.title }}
-        </h5>
+        </a>
 
-        <!-- Description -->
-        <p class="text-muted mb-2" *ngIf="task.description">
-          {{ task.description }}
-        </p>
-
-        <!-- Priority -->
-        <span
-          class="badge me-2"
-          [ngClass]="{
-            'bg-success': task.priority === 'LOW',
-            'bg-warning text-dark': task.priority === 'MEDIUM',
-            'bg-danger': task.priority === 'HIGH',
-            'bg-dark': task.priority === 'URGENT',
-          }"
-        >
-          {{ task.priority }}
-        </span>
-
-        <!-- Status -->
-        <span
-          class="badge me-2"
-          [ngClass]="{
-            'bg-secondary': task.status === 'TODO',
-            'bg-primary': task.status === 'IN_PROGRESS',
-            'bg-success': task.status === 'COMPLETED',
-          }"
-        >
-          {{
-            task.status === "TODO"
-              ? "To Do"
-              : task.status === "IN_PROGRESS"
-                ? "In Progress"
-                : "Completed"
-          }}
-        </span>
-
-        <!-- Category -->
-        <span class="badge bg-info text-dark me-2">
-          {{ task.category }}
-        </span>
-
-        <!-- Due Date -->
-        <span class="badge bg-primary me-2" *ngIf="task.dueDate">
-          Due: {{ task.dueDate | date: "mediumDate" }}
-        </span>
-
-        <span *ngIf="isOverdue()" class="badge bg-danger me-2"> Overdue </span>
-
-        <!-- Tags -->
-        <div class="mt-1" *ngIf="task.tags?.length">
-          <span
-            class="badge bg-light text-dark border me-1"
-            *ngFor="let tag of task.tags"
-          >
-            #{{ tag }}
-          </span>
-        </div>
-      </div>
-
-      <!-- Actions -->
-      <div class="btn-grp">
-        <div class="btn-group">
+        <!-- Desktop Action Buttons -->
+        <div class="task-action-btns d-none d-sm-flex align-items-center gap-1">
           <button
-            class="btn btn-sm btn-outline-primary"
+            type="button"
+            class="action-icon-btn action-view"
             (click)="viewTask()"
-            title="View Task"
+            title="View Task Details"
+            aria-label="View task details"
           >
-            <i class="fa-solid fa-eye"></i>
+            <i class="fa-regular fa-eye"></i>
           </button>
 
           <button
-            class="btn btn-sm btn-outline-secondary"
+            type="button"
+            class="action-icon-btn action-edit"
             (click)="editTask()"
             title="Edit Task"
+            aria-label="Edit task"
           >
             <i class="fa-solid fa-pen"></i>
           </button>
 
           <button
-            class="btn btn-sm btn-outline-danger"
+            type="button"
+            class="action-icon-btn action-delete"
             (click)="deleteTask()"
+            [disabled]="deleting"
             title="Delete Task"
+            aria-label="Delete task"
           >
-            <i class="fa-solid fa-trash"></i>
+            <span *ngIf="deleting" class="spinner-border spinner-border-sm text-danger"></span>
+            <i *ngIf="!deleting" class="fa-regular fa-trash-can"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Description Snippet -->
+      <p *ngIf="task.description" class="task-item-desc mb-2">
+        {{ task.description }}
+      </p>
+
+      <!-- Badges & Metadata Row -->
+      <div class="d-flex flex-wrap align-items-center gap-2 pt-1">
+        <!-- Status Badge -->
+        <span
+          class="badge-pill"
+          [ngClass]="{
+            'badge-status-todo': task.status === 'TODO',
+            'badge-status-progress': task.status === 'IN_PROGRESS',
+            'badge-status-completed': task.status === 'COMPLETED'
+          }"
+        >
+          <span class="badge-dot"></span>
+          {{
+            task.status === 'TODO'
+              ? 'To Do'
+              : task.status === 'IN_PROGRESS'
+              ? 'In Progress'
+              : 'Completed'
+          }}
+        </span>
+
+        <!-- Priority Badge -->
+        <span
+          class="badge-pill"
+          [ngClass]="{
+            'badge-priority-low': task.priority === 'LOW',
+            'badge-priority-medium': task.priority === 'MEDIUM',
+            'badge-priority-high': task.priority === 'HIGH',
+            'badge-priority-urgent': task.priority === 'URGENT'
+          }"
+        >
+          {{ task.priority }}
+        </span>
+
+        <!-- Category Badge -->
+        <span class="badge-category" *ngIf="task.category">
+          <i class="fa-solid fa-folder text-muted"></i>
+          {{ task.category }}
+        </span>
+
+        <!-- Due Date Badge -->
+        <span
+          *ngIf="task.dueDate"
+          class="badge-date"
+          [ngClass]="{
+            'overdue': isOverdue(),
+            'due-today': isDueToday()
+          }"
+        >
+          <i class="fa-regular fa-calendar"></i>
+          <span *ngIf="isOverdue()">Overdue · </span>
+          <span *ngIf="isDueToday()">Due Today · </span>
+          {{ task.dueDate | date: 'mediumDate' }}
+        </span>
+
+        <!-- Tags -->
+        <ng-container *ngIf="task.tags && task.tags.length > 0">
+          <span class="badge-tag" *ngFor="let tag of task.tags">
+            #{{ tag }}
+          </span>
+        </ng-container>
+
+        <!-- Mobile Action Buttons (Visible only on very small screens) -->
+        <div class="d-flex d-sm-none align-items-center gap-1 ms-auto pt-1">
+          <button
+            type="button"
+            class="action-icon-btn action-view"
+            (click)="viewTask()"
+            aria-label="View task details"
+          >
+            <i class="fa-regular fa-eye"></i>
+          </button>
+          <button
+            type="button"
+            class="action-icon-btn action-edit"
+            (click)="editTask()"
+            aria-label="Edit task"
+          >
+            <i class="fa-solid fa-pen"></i>
+          </button>
+          <button
+            type="button"
+            class="action-icon-btn action-delete"
+            (click)="deleteTask()"
+            [disabled]="deleting"
+            aria-label="Delete task"
+          >
+            <span *ngIf="deleting" class="spinner-border spinner-border-sm text-danger"></span>
+            <i *ngIf="!deleting" class="fa-regular fa-trash-can"></i>
           </button>
         </div>
       </div>

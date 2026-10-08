@@ -1,585 +1,270 @@
-<div class="container mt-4">
-
-  <!-- ==========================
-       Header
-  =========================== -->
-
-  <div
-    class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center mb-4 gap-2"
-  >
-
+<div class="app-container py-4">
+  <!-- Kanban Header -->
+  <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center mb-4 gap-3">
     <div>
-      <h4 class="mb-1">
-        <i class="fa-solid fa-table-columns me-2"></i>
+      <h2 class="page-title mb-1">
+        <i class="fa-solid fa-table-columns text-primary me-2"></i>
         Kanban Board
-      </h4>
-
-      <p class="text-muted mb-0">
-        Manage your tasks by dragging them between columns.
+      </h2>
+      <p class="page-subtitle">
+        Visual task pipeline. Drag and drop cards to update progress in real time.
       </p>
     </div>
 
-    <div class="d-flex gap-2">
-
+    <div class="d-flex align-items-center gap-2">
       <button
-        class="btn btn-primary"
         type="button"
-        (click)="addTask()"
-      >
-        <i class="fa-solid fa-plus me-1"></i>
-        Add Task
-      </button>
-
-      <button
         class="btn btn-outline-secondary"
-        type="button"
         (click)="refreshBoard()"
         [disabled]="loading"
+        title="Refresh board"
       >
-        <i class="fa-solid fa-arrows-rotate me-1"></i>
-        Refresh
+        <i class="fa-solid fa-arrows-rotate" [class.fa-spin]="loading"></i>
+        <span>Refresh</span>
       </button>
 
+      <button
+        type="button"
+        class="btn btn-primary"
+        (click)="addTask()"
+      >
+        <i class="fa-solid fa-plus"></i>
+        <span>New Task</span>
+      </button>
     </div>
-
   </div>
 
-
-  <!-- ==========================
-       Loading
-  =========================== -->
-
-  <div
-    *ngIf="loading"
-    class="text-center py-5"
-  >
-
-    <div
-      class="spinner-border text-primary"
-      role="status"
-    ></div>
-
-    <p class="text-muted mt-2">
-      Loading tasks...
-    </p>
-
+  <!-- Loading State -->
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading tasks...</span>
+    </div>
+    <p class="text-muted mt-2 small">Loading board columns...</p>
   </div>
 
-
-  <!-- ==========================
-       Kanban Board
-  =========================== -->
-
-  <div
-    *ngIf="!loading"
-    class="row g-4"
-  >
-
-
-    <!-- ==========================
-         TODO COLUMN
-    =========================== -->
-
-    <div class="col-12 col-md-6 col-xl-4">
-
-      <div class="kanban-column">
-
-        <!-- Column Header -->
-
-        <div class="kanban-header">
-
-          <div class="d-flex align-items-center">
-
-            <span class="status-dot todo-dot"></span>
-
-            <h5 class="mb-0">
-              To Do
-            </h5>
-
+  <!-- Kanban Columns Grid -->
+  <div *ngIf="!loading" class="row g-4 kanban-board-row">
+    <!-- 1. TO DO COLUMN -->
+    <div class="col-12 col-md-4">
+      <div class="kanban-column column-todo">
+        <div class="kanban-column-header">
+          <div class="d-flex align-items-center gap-2">
+            <span class="column-dot dot-todo"></span>
+            <span class="column-title">To Do</span>
+            <span class="column-counter">{{ todoTasks.length }}</span>
           </div>
-
-          <span class="task-count">
-            {{ todoTasks.length }}
-          </span>
-
         </div>
-
-
-        <!-- Drop List -->
 
         <div
           cdkDropList
           #todoList="cdkDropList"
           [cdkDropListData]="todoTasks"
-          [cdkDropListConnectedTo]="[
-            inProgressList,
-            completedList
-          ]"
-          class="task-list"
+          [cdkDropListConnectedTo]="[inProgressList, completedList]"
+          class="kanban-drop-zone"
           (cdkDropListDropped)="dropTask($event, 'TODO')"
         >
-
-
-          <!-- Task -->
-
           <div
-            *ngFor="
-              let task of todoTasks;
-              trackBy: trackByTaskId
-            "
+            *ngFor="let task of todoTasks; trackBy: trackByTaskId"
             cdkDrag
-            class="task-card"
+            class="kanban-card saas-card"
           >
-
             <ng-container
-              *ngTemplateOutlet="
-                taskTemplate;
-                context: {
-                  task: task
-                }
-              "
+              *ngTemplateOutlet="taskTemplate; context: { task: task }"
             ></ng-container>
-
           </div>
 
-
-          <!-- Empty -->
-
-          <div
-            *ngIf="todoTasks.length === 0"
-            class="empty-column"
-          >
-
-            <i class="fa-regular fa-circle mb-2"></i>
-
-            <span>
-              No tasks
-            </span>
-
-            <small>
-              Drag tasks here
-            </small>
-
+          <!-- Empty State -->
+          <div *ngIf="todoTasks.length === 0" class="kanban-empty-zone">
+            <i class="fa-regular fa-circle-dot empty-icon"></i>
+            <span class="empty-text">No tasks waiting</span>
+            <small class="empty-subtext">Drag tasks here</small>
           </div>
-
         </div>
-
       </div>
-
     </div>
 
-
-    <!-- ==========================
-         IN PROGRESS COLUMN
-    =========================== -->
-
-    <div class="col-12 col-md-6 col-xl-4">
-
-      <div class="kanban-column">
-
-        <!-- Header -->
-
-        <div class="kanban-header">
-
-          <div class="d-flex align-items-center">
-
-            <span class="status-dot progress-dot"></span>
-
-            <h5 class="mb-0">
-              In Progress
-            </h5>
-
+    <!-- 2. IN PROGRESS COLUMN -->
+    <div class="col-12 col-md-4">
+      <div class="kanban-column column-progress">
+        <div class="kanban-column-header">
+          <div class="d-flex align-items-center gap-2">
+            <span class="column-dot dot-progress"></span>
+            <span class="column-title">In Progress</span>
+            <span class="column-counter">{{ inProgressTasks.length }}</span>
           </div>
-
-          <span class="task-count">
-            {{ inProgressTasks.length }}
-          </span>
-
         </div>
-
-
-        <!-- Drop List -->
 
         <div
           cdkDropList
           #inProgressList="cdkDropList"
           [cdkDropListData]="inProgressTasks"
-          [cdkDropListConnectedTo]="[
-            todoList,
-            completedList
-          ]"
-          class="task-list"
-          (cdkDropListDropped)="
-            dropTask($event, 'IN_PROGRESS')
-          "
+          [cdkDropListConnectedTo]="[todoList, completedList]"
+          class="kanban-drop-zone"
+          (cdkDropListDropped)="dropTask($event, 'IN_PROGRESS')"
         >
-
-
-          <!-- Task -->
-
           <div
-            *ngFor="
-              let task of inProgressTasks;
-              trackBy: trackByTaskId
-            "
+            *ngFor="let task of inProgressTasks; trackBy: trackByTaskId"
             cdkDrag
-            class="task-card"
+            class="kanban-card saas-card"
           >
-
             <ng-container
-              *ngTemplateOutlet="
-                taskTemplate;
-                context: {
-                  task: task
-                }
-              "
+              *ngTemplateOutlet="taskTemplate; context: { task: task }"
             ></ng-container>
-
           </div>
 
-
-          <!-- Empty -->
-
-          <div
-            *ngIf="inProgressTasks.length === 0"
-            class="empty-column"
-          >
-
-            <i class="fa-solid fa-spinner mb-2"></i>
-
-            <span>
-              No tasks
-            </span>
-
-            <small>
-              Drag tasks here
-            </small>
-
+          <!-- Empty State -->
+          <div *ngIf="inProgressTasks.length === 0" class="kanban-empty-zone">
+            <i class="fa-solid fa-spinner empty-icon"></i>
+            <span class="empty-text">No active tasks</span>
+            <small class="empty-subtext">Drag tasks here to start</small>
           </div>
-
         </div>
-
       </div>
-
     </div>
 
-
-    <!-- ==========================
-         COMPLETED COLUMN
-    =========================== -->
-
-    <div class="col-12 col-md-6 col-xl-4">
-
-      <div class="kanban-column">
-
-        <!-- Header -->
-
-        <div class="kanban-header">
-
-          <div class="d-flex align-items-center">
-
-            <span class="status-dot completed-dot"></span>
-
-            <h5 class="mb-0">
-              Completed
-            </h5>
-
+    <!-- 3. COMPLETED COLUMN -->
+    <div class="col-12 col-md-4">
+      <div class="kanban-column column-completed">
+        <div class="kanban-column-header">
+          <div class="d-flex align-items-center gap-2">
+            <span class="column-dot dot-completed"></span>
+            <span class="column-title">Completed</span>
+            <span class="column-counter">{{ completedTasks.length }}</span>
           </div>
-
-          <span class="task-count">
-            {{ completedTasks.length }}
-          </span>
-
         </div>
-
-
-        <!-- Drop List -->
 
         <div
           cdkDropList
           #completedList="cdkDropList"
           [cdkDropListData]="completedTasks"
-          [cdkDropListConnectedTo]="[
-            todoList,
-            inProgressList
-          ]"
-          class="task-list"
-          (cdkDropListDropped)="
-            dropTask($event, 'COMPLETED')
-          "
+          [cdkDropListConnectedTo]="[todoList, inProgressList]"
+          class="kanban-drop-zone"
+          (cdkDropListDropped)="dropTask($event, 'COMPLETED')"
         >
-
-
-          <!-- Task -->
-
           <div
-            *ngFor="
-              let task of completedTasks;
-              trackBy: trackByTaskId
-            "
+            *ngFor="let task of completedTasks; trackBy: trackByTaskId"
             cdkDrag
-            class="task-card"
+            class="kanban-card saas-card kanban-card-completed"
           >
-
             <ng-container
-              *ngTemplateOutlet="
-                taskTemplate;
-                context: {
-                  task: task
-                }
-              "
+              *ngTemplateOutlet="taskTemplate; context: { task: task }"
             ></ng-container>
-
           </div>
 
-
-          <!-- Empty -->
-
-          <div
-            *ngIf="completedTasks.length === 0"
-            class="empty-column"
-          >
-
-            <i class="fa-regular fa-circle-check mb-2"></i>
-
-            <span>
-              No completed tasks
-            </span>
-
-            <small>
-              Completed tasks will appear here
-            </small>
-
+          <!-- Empty State -->
+          <div *ngIf="completedTasks.length === 0" class="kanban-empty-zone">
+            <i class="fa-solid fa-circle-check empty-icon"></i>
+            <span class="empty-text">No tasks finished</span>
+            <small class="empty-subtext">Drag resolved tasks here</small>
           </div>
-
         </div>
-
       </div>
-
     </div>
-
   </div>
-
 </div>
 
+<!-- Reusable Kanban Card Template -->
+<ng-template #taskTemplate let-task="task">
+  <div class="kanban-card-inner p-3">
+    <!-- Card Top: Drag Handle + Priority + Spinner -->
+    <div class="d-flex align-items-center justify-content-between mb-2">
+      <div class="d-flex align-items-center gap-2">
+        <div class="card-drag-handle" cdkDragHandle title="Drag task">
+          <i class="fa-solid fa-grip-vertical"></i>
+        </div>
+        <span class="badge-pill" [ngClass]="getPriorityClass(task.priority)">
+          {{ task.priority }}
+        </span>
+      </div>
 
-<!-- ==================================================
-     TASK TEMPLATE
-=================================================== -->
-
-<ng-template
-  #taskTemplate
-  let-task="task"
->
-
-  <!-- Drag Handle -->
-
-  <div class="task-top">
-
-    <div
-      class="drag-handle"
-      cdkDragHandle
-      title="Drag task"
-    >
-      <i class="fa-solid fa-grip-vertical"></i>
+      <div *ngIf="updatingTaskId === task._id" class="spinner-border spinner-border-sm text-primary" role="status"></div>
     </div>
 
-    <div class="flex-grow-1"></div>
-
-    <!-- Updating -->
-
-    <div
-      *ngIf="updatingTaskId === task._id"
-      class="spinner-border spinner-border-sm text-primary"
-    ></div>
-
-  </div>
-
-
-  <!-- Title -->
-
-  <a
-    [routerLink]="['/tasks', task._id]"
-    class="task-title"
-  >
-    {{ task.title }}
-  </a>
-
-
-  <!-- Description -->
-
-  <p
-    *ngIf="task.description"
-    class="task-description"
-  >
-    {{ task.description }}
-  </p>
-
-
-  <!-- Priority + Category -->
-
-  <div class="task-meta">
-
-    <span
-      class="priority-badge"
-      [ngClass]="getPriorityClass(task.priority)"
-    >
-      {{ task.priority }}
-    </span>
-
-    <span class="category-badge">
-      <i class="fa-solid fa-folder me-1"></i>
-      {{ task.category }}
-    </span>
-
-  </div>
-
-
-  <!-- Due Date -->
-
-  <div
-    *ngIf="task.dueDate"
-    class="task-due-date"
-    [ngClass]="{
-      'overdue': isOverdue(task),
-      'due-today': isDueToday(task)
-    }"
-  >
-
-    <i class="fa-regular fa-calendar me-1"></i>
-
-    <span *ngIf="isOverdue(task)">
-      Overdue · {{ formatDueDate(task.dueDate) }}
-    </span>
-
-    <span *ngIf="isDueToday(task)">
-      Due Today
-    </span>
-
-    <span
-      *ngIf="
-        !isOverdue(task) &&
-        !isDueToday(task)
-      "
-    >
-      Due {{ formatDueDate(task.dueDate) }}
-    </span>
-
-  </div>
-
-
-  <!-- Tags -->
-
-  <div
-    *ngIf="task.tags && task.tags.length"
-    class="task-tags"
-  >
-
-    <span
-      *ngFor="let tag of task.tags"
-      class="tag"
-    >
-      #{{ tag }}
-    </span>
-
-  </div>
-
-
-  <!-- Actions -->
-
-  <div class="task-actions">
-
-    <!-- View -->
-
+    <!-- Title -->
     <a
       [routerLink]="['/tasks', task._id]"
-      class="task-action view-action"
-      title="View Task"
+      class="kanban-task-title d-block mb-1 text-decoration-none"
+      [class.text-decoration-line-through]="task.status === 'COMPLETED'"
     >
-      <i class="fa-regular fa-eye"></i>
-    </a>
-
-
-    <!-- Edit -->
-
-    <a
-      [routerLink]="[
-        '/tasks',
-        task._id,
-        'edit'
-      ]"
-      class="task-action edit-action"
-      title="Edit Task"
-    >
-      <i class="fa-solid fa-pen"></i>
-    </a>
-
-
-    <!-- Delete -->
-
-    <button
-      type="button"
-      class="task-action delete-action"
-      title="Delete Task"
-      (click)="deleteTask(task)"
-      [disabled]="deletingTaskId === task._id"
-    >
-
-      <span
-        *ngIf="
-          deletingTaskId === task._id
-        "
-        class="spinner-border spinner-border-sm"
-      ></span>
-
-      <i
-        *ngIf="
-          deletingTaskId !== task._id
-        "
-        class="fa-regular fa-trash-can"
-      ></i>
-
-    </button>
-
-  </div>
-
-
-  <!-- Drag Preview -->
-
-  <div
-    *cdkDragPreview
-    class="task-card drag-preview"
-  >
-
-    <div class="task-top">
-
-      <i class="fa-solid fa-grip-vertical"></i>
-
-    </div>
-
-    <strong>
       {{ task.title }}
-    </strong>
+    </a>
 
-    <div class="mt-2">
+    <!-- Description -->
+    <p *ngIf="task.description" class="kanban-task-desc mb-2">
+      {{ task.description }}
+    </p>
 
-      <span
-        class="priority-badge"
-        [ngClass]="getPriorityClass(task.priority)"
-      >
-        {{ task.priority }}
+    <!-- Meta Information: Category + Due Date -->
+    <div class="d-flex align-items-center flex-wrap gap-1 mb-2">
+      <span class="badge-category" *ngIf="task.category">
+        <i class="fa-solid fa-folder text-muted me-1"></i>
+        {{ task.category }}
       </span>
 
+      <span
+        *ngIf="task.dueDate"
+        class="badge-date"
+        [ngClass]="{
+          'overdue': isOverdue(task),
+          'due-today': isDueToday(task)
+        }"
+      >
+        <i class="fa-regular fa-calendar me-1"></i>
+        <span *ngIf="isOverdue(task)">Overdue · </span>
+        <span *ngIf="isDueToday(task)">Due Today · </span>
+        {{ formatDueDate(task.dueDate) }}
+      </span>
     </div>
 
+    <!-- Tags -->
+    <div *ngIf="task.tags && task.tags.length" class="d-flex flex-wrap gap-1 mb-2">
+      <span *ngFor="let tag of task.tags" class="badge-tag">
+        #{{ tag }}
+      </span>
+    </div>
+
+    <!-- Bottom Actions -->
+    <div class="kanban-card-actions pt-2 border-top d-flex justify-content-end align-items-center gap-1">
+      <a
+        [routerLink]="['/tasks', task._id]"
+        class="action-icon-btn action-view"
+        title="View Task Details"
+      >
+        <i class="fa-regular fa-eye"></i>
+      </a>
+
+      <a
+        [routerLink]="['/tasks', task._id, 'edit']"
+        class="action-icon-btn action-edit"
+        title="Edit Task"
+      >
+        <i class="fa-solid fa-pen"></i>
+      </a>
+
+      <button
+        type="button"
+        class="action-icon-btn action-delete"
+        title="Delete Task"
+        (click)="deleteTask(task)"
+        [disabled]="deletingTaskId === task._id"
+      >
+        <span *ngIf="deletingTaskId === task._id" class="spinner-border spinner-border-sm text-danger"></span>
+        <i *ngIf="deletingTaskId !== task._id" class="fa-regular fa-trash-can"></i>
+      </button>
+    </div>
   </div>
 
+  <!-- Drag Preview Element -->
+  <div *cdkDragPreview class="kanban-card saas-card drag-preview-card p-3">
+    <div class="d-flex align-items-center justify-content-between mb-2">
+      <i class="fa-solid fa-grip-vertical text-muted"></i>
+      <span class="badge-pill" [ngClass]="getPriorityClass(task.priority)">
+        {{ task.priority }}
+      </span>
+    </div>
+    <div class="fw-semibold text-slate-900 small">{{ task.title }}</div>
+  </div>
 
-  <!-- Drag Placeholder -->
-
-  <div
-    *cdkDragPlaceholder
-    class="task-placeholder"
-  ></div>
-
+  <!-- Drag Placeholder Element -->
+  <div *cdkDragPlaceholder class="kanban-drag-placeholder mb-2"></div>
 </ng-template>

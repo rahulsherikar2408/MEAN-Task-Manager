@@ -1,545 +1,173 @@
-/* =========================================
-   Kanban Column
-========================================= */
+/* ==========================================================================
+   KANBAN BOARD COMPONENT STYLES
+   ========================================================================== */
 
 .kanban-column {
-  background: #f8f9fa;
-  border: 1px solid #e9ecef;
-  border-radius: 12px;
-
-  padding: 15px;
-
-  min-height: 500px;
-
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
-}
-
-
-/* =========================================
-   Kanban Header
-========================================= */
-
-.kanban-header {
+  background-color: var(--slate-100);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1rem;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  padding: 5px 5px 15px;
-
-  border-bottom: 1px solid #dee2e6;
-
-  margin-bottom: 15px;
+  flex-direction: column;
+  min-height: calc(100vh - 240px);
 }
 
-.kanban-header h5 {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #343a40;
+.kanban-column-header {
+  padding-bottom: 0.85rem;
+  margin-bottom: 0.85rem;
+  border-bottom: 1px solid var(--slate-200);
 }
 
+.column-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--slate-800);
+}
 
-/* =========================================
-   Status Dots
-========================================= */
-
-.status-dot {
-  width: 10px;
-  height: 10px;
-
+.column-dot {
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-
-  margin-right: 8px;
+  display: inline-block;
 }
 
-.todo-dot {
-  background-color: #6c757d;
+.dot-todo {
+  background-color: var(--slate-500);
 }
 
-.progress-dot {
-  background-color: #ffc107;
+.dot-progress {
+  background-color: #2563eb;
 }
 
-.completed-dot {
-  background-color: #198754;
+.dot-completed {
+  background-color: #10b981;
 }
 
+.column-counter {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--slate-600);
+  background-color: #ffffff;
+  border: 1px solid var(--slate-200);
+  padding: 0.1rem 0.5rem;
+  border-radius: var(--radius-pill);
+}
 
-/* =========================================
-   Task Count
-========================================= */
-
-.task-count {
-  min-width: 28px;
-  height: 28px;
-
+/* Drop Zone */
+.kanban-drop-zone {
+  flex-grow: 1;
+  min-height: 250px;
   display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 50%;
-
-  background: #e9ecef;
-
-  color: #495057;
-
-  font-size: 0.8rem;
-  font-weight: 600;
+  flex-direction: column;
 }
 
-
-/* =========================================
-   Task List
-========================================= */
-
-.task-list {
-  min-height: 400px;
-}
-
-
-/* =========================================
-   Task Card
-========================================= */
-
-.task-card {
+/* Kanban Card */
+.kanban-card {
   background: #ffffff;
-
-  border: 1px solid #e1e5e9;
-
-  border-radius: 10px;
-
-  padding: 14px;
-
-  margin-bottom: 12px;
-
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-
-  transition:
-    box-shadow 0.2s ease,
-    transform 0.2s ease;
+  margin-bottom: 0.75rem;
+  transition: box-shadow 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
 }
 
-.task-card:hover {
-  box-shadow: 0 5px 14px rgba(0, 0, 0, 0.1);
+.kanban-card:hover {
+  border-color: var(--border-hover);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
 }
 
-
-/* =========================================
-   Task Top
-========================================= */
-
-.task-top {
-  display: flex;
-  align-items: center;
-
-  min-height: 18px;
-
-  margin-bottom: 8px;
+.kanban-card-completed {
+  background-color: #fafbfc;
 }
 
-
-/* =========================================
-   Drag Handle
-========================================= */
-
-.drag-handle {
-  color: #adb5bd;
-
+.card-drag-handle {
+  color: var(--slate-400);
   cursor: grab;
-
-  padding: 2px 4px;
-
+  padding: 0 4px;
   font-size: 0.85rem;
 }
 
-.drag-handle:hover {
-  color: #495057;
-}
-
-.drag-handle:active {
+.card-drag-handle:active {
   cursor: grabbing;
 }
 
-
-/* =========================================
-   Task Title
-========================================= */
-
-.task-title {
-  display: block;
-
-  color: #212529;
-
-  text-decoration: none;
-
-  font-size: 1rem;
-
+.kanban-task-title {
+  font-size: 0.925rem;
   font-weight: 600;
+  color: var(--slate-900);
+  line-height: 1.35;
+  transition: color 0.15s ease;
+}
 
+.kanban-task-title:hover {
+  color: var(--primary);
+}
+
+.kanban-task-desc {
+  font-size: 0.825rem;
+  color: var(--slate-500);
   line-height: 1.4;
-
-  margin-bottom: 8px;
-}
-
-.task-title:hover {
-  color: #0d6efd;
-
-  text-decoration: underline;
-}
-
-
-/* =========================================
-   Description
-========================================= */
-
-.task-description {
-  color: #6c757d;
-
-  font-size: 0.85rem;
-
-  line-height: 1.45;
-
-  margin-bottom: 12px;
-
   display: -webkit-box;
-
   -webkit-line-clamp: 2;
-
   -webkit-box-orient: vertical;
-
   overflow: hidden;
 }
 
-
-/* =========================================
-   Task Meta
-========================================= */
-
-.task-meta {
+/* Empty Zone */
+.kanban-empty-zone {
+  flex-grow: 1;
+  min-height: 160px;
   display: flex;
-
-  align-items: center;
-
-  flex-wrap: wrap;
-
-  gap: 6px;
-
-  margin-bottom: 10px;
-}
-
-
-/* =========================================
-   Priority Badges
-========================================= */
-
-.priority-badge {
-  display: inline-flex;
-
-  align-items: center;
-
-  padding: 4px 8px;
-
-  border-radius: 5px;
-
-  font-size: 0.7rem;
-
-  font-weight: 600;
-
-  text-transform: uppercase;
-}
-
-.priority-low {
-  background: #d1e7dd;
-  color: #0f5132;
-}
-
-.priority-medium {
-  background: #cfe2ff;
-  color: #084298;
-}
-
-.priority-high {
-  background: #fff3cd;
-  color: #664d03;
-}
-
-.priority-urgent {
-  background: #f8d7da;
-  color: #842029;
-}
-
-.priority-default {
-  background: #e9ecef;
-  color: #495057;
-}
-
-
-/* =========================================
-   Category
-========================================= */
-
-.category-badge {
-  display: inline-flex;
-
-  align-items: center;
-
-  padding: 4px 8px;
-
-  border-radius: 5px;
-
-  background: #f1f3f5;
-
-  color: #495057;
-
-  font-size: 0.7rem;
-}
-
-
-/* =========================================
-   Due Date
-========================================= */
-
-.task-due-date {
-  display: flex;
-
-  align-items: center;
-
-  font-size: 0.78rem;
-
-  color: #6c757d;
-
-  margin-bottom: 8px;
-}
-
-.task-due-date.overdue {
-  color: #dc3545;
-
-  font-weight: 600;
-}
-
-.task-due-date.due-today {
-  color: #fd7e14;
-
-  font-weight: 600;
-}
-
-
-/* =========================================
-   Tags
-========================================= */
-
-.task-tags {
-  margin-bottom: 10px;
-
-  line-height: 1.8;
-}
-
-.tag {
-  display: inline-block;
-
-  color: #6c757d;
-
-  background: #f8f9fa;
-
-  border: 1px solid #dee2e6;
-
-  border-radius: 4px;
-
-  padding: 1px 5px;
-
-  margin-right: 4px;
-
-  margin-bottom: 3px;
-
-  font-size: 0.7rem;
-}
-
-
-/* =========================================
-   Task Actions
-========================================= */
-
-.task-actions {
-  display: flex;
-
-  gap: 5px;
-
-  padding-top: 10px;
-
-  border-top: 1px solid #f1f3f5;
-}
-
-.task-action {
-  width: 32px;
-  height: 30px;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  border-radius: 6px;
-
-  background: transparent;
-
-  border: 1px solid #dee2e6;
-
-  text-decoration: none;
-
-  cursor: pointer;
-
-  transition:
-    background-color 0.2s ease,
-    color 0.2s ease,
-    border-color 0.2s ease;
-}
-
-.view-action {
-  color: #0d6efd;
-}
-
-.view-action:hover {
-  background: #e7f1ff;
-
-  border-color: #0d6efd;
-}
-
-.edit-action {
-  color: #6c757d;
-}
-
-.edit-action:hover {
-  background: #f1f3f5;
-
-  border-color: #6c757d;
-}
-
-.delete-action {
-  color: #dc3545;
-}
-
-.delete-action:hover {
-  background: #f8d7da;
-
-  border-color: #dc3545;
-}
-
-.task-action:disabled {
-  opacity: 0.6;
-
-  cursor: not-allowed;
-}
-
-
-/* =========================================
-   Empty Column
-========================================= */
-
-.empty-column {
-  min-height: 350px;
-
-  display: flex;
-
   flex-direction: column;
-
-  justify-content: center;
-
   align-items: center;
-
-  color: #adb5bd;
-
+  justify-content: center;
+  color: var(--slate-400);
+  border: 1px dashed var(--slate-300);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
   text-align: center;
 }
 
-.empty-column i {
-  font-size: 1.8rem;
+.empty-icon {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
 }
 
-.empty-column span {
-  font-size: 0.9rem;
-
-  font-weight: 500;
+.empty-text {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--slate-600);
 }
 
-.empty-column small {
+.empty-subtext {
   font-size: 0.75rem;
+  color: var(--slate-400);
 }
 
-
-/* =========================================
-   Drag Preview
-========================================= */
-
-.drag-preview {
-  width: 300px;
-
-  margin: 0;
-
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-
+/* Dragging Preview & Placeholder */
+.drag-preview-card {
+  box-shadow: var(--shadow-xl);
   transform: rotate(2deg);
+  width: 320px;
+  border-color: var(--primary-border);
 }
 
-
-/* =========================================
-   Drag Placeholder
-========================================= */
-
-.task-placeholder {
-  min-height: 120px;
-
-  border: 2px dashed #adb5bd;
-
-  border-radius: 10px;
-
-  background: #f1f3f5;
-
-  margin-bottom: 12px;
+.kanban-drag-placeholder {
+  min-height: 90px;
+  background-color: var(--primary-50);
+  border: 2px dashed var(--primary-300);
+  border-radius: var(--radius-md);
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
-
-
-/* =========================================
-   CDK Drag Animation
-========================================= */
 
 .cdk-drag-animating {
-  transition: transform 250ms ease;
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
 
-.task-list.cdk-drop-list-dragging
-.task-card:not(.cdk-drag-placeholder) {
-  transition: transform 250ms ease;
+.kanban-drop-zone.cdk-drop-list-dragging .kanban-card:not(.cdk-drag-placeholder) {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
-
-
-/* =========================================
-   Responsive
-========================================= */
 
 @media (max-width: 767px) {
-
   .kanban-column {
-    min-height: 350px;
+    min-height: 380px;
   }
-
-  .task-list {
-    min-height: 250px;
-  }
-
-  .empty-column {
-    min-height: 200px;
-  }
-
-}
-
-@media (max-width: 575px) {
-
-  .task-card {
-    padding: 12px;
-  }
-
-  .task-title {
-    font-size: 0.95rem;
-  }
-
 }

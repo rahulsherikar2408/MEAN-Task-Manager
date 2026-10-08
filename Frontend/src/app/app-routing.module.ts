@@ -29,6 +29,11 @@ const routes: Routes = [
   },
 
   {
+    path: 'tasks/new',
+    redirectTo: 'task/new',
+    pathMatch: 'full',
+  },
+  {
     path: 'tasks/:id/edit',
     component: EditTaskComponent,
     canActivate: [authGuard],

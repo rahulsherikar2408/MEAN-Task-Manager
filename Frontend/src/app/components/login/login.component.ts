@@ -12,6 +12,7 @@ export class LoginComponent {
   email = '';
   password = '';
   loading = false;
+  showPassword = false;
 
   constructor(
     private authService: AuthService,
@@ -19,10 +20,13 @@ export class LoginComponent {
     private toastr: ToastrService,
   ) {}
 
+  togglePasswordVisibility(): void {
+    this.showPassword = !this.showPassword;
+  }
+
   login(): void {
     if (!this.email.trim() || !this.password) {
-      this.toastr.error('Please fill all fields.', 'Error');
-
+      this.toastr.error('Please fill in all required fields.', 'Error');
       return;
     }
 
@@ -36,7 +40,7 @@ export class LoginComponent {
       .subscribe({
         next: () => {
           this.loading = false;
-          this.toastr.success('Login successfull!', 'Success');
+          this.toastr.success('Welcome back! Login successful.', 'Success');
           this.router.navigate(['/']);
         },
         error: (err) => {

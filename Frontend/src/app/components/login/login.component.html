@@ -1,85 +1,103 @@
-<div class="container mt-5">
-  <div class="row justify-content-center">
-    <div class="col-md-5">
-      <div class="card shadow">
-        <div class="card-body">
+<div class="auth-page-container">
+  <div class="auth-card-wrap">
+    <!-- Brand Mark Header -->
+    <div class="text-center mb-4">
+      <div class="auth-brand-logo mb-2">
+        <i class="fa-solid fa-check-double"></i>
+      </div>
+      <h3 class="auth-brand-name">TaskFlow</h3>
+      <h4 class="auth-title mt-3 mb-1">Welcome back</h4>
+      <p class="auth-subtitle">Enter your email and password to access your tasks.</p>
+    </div>
 
-          <h3 class="text-center mb-4">Login</h3>
-
-          <form #loginForm="ngForm" (ngSubmit)="login()">
-
-            <div class="mb-3">
-              <label class="form-label">
-                Email
-              </label>
-              <input
-                type="email"
-                class="form-control"
-                name="email"
-                [(ngModel)]="email"
-                #emailField="ngModel"
-                required
-                email
-              >
-              <div
-                class="text-danger mt-1"
-                *ngIf="
-                  emailField.invalid &&
-                  (emailField.dirty || emailField.touched)
-                ">
-                <small
-                  *ngIf="emailField.errors?.['required']">
-                  Email is required.
-                </small>
-                <small
-                  *ngIf="emailField.errors?.['email']">
-                  Enter a valid email.
-                </small>
-              </div>
-            </div>
-
-            <div class="mb-3">
-              <label class="form-label">
-                Password
-              </label>
-              <input
-                type="password"
-                class="form-control"
-                name="password"
-                [(ngModel)]="password"
-                #passwordField="ngModel"
-                required
-              >
-              <div
-                class="text-danger mt-1"
-                *ngIf="
-                  passwordField.invalid &&
-                  (passwordField.dirty || passwordField.touched)
-                ">
-                <small>
-                  Password is required.
-                </small>
-              </div>
-            </div>
-
-            <button
-              type="submit"
-              class="btn btn-primary w-100"
-              [disabled]="loginForm.invalid || loading">
-              <span
-                *ngIf="loading"
-                class="spinner-border spinner-border-sm me-2">
-              </span>
-              {{ loading ? 'Logging in...' : 'Login' }}
-            </button>
-          </form>
-
-          <div class="text-center mt-3">
-            Don't have an account?
-            <a routerLink="/signup">Sign Up</a>
+    <!-- Login Card -->
+    <div class="saas-card p-4 p-sm-5">
+      <form #loginForm="ngForm" (ngSubmit)="login()">
+        <!-- Email -->
+        <div class="mb-3">
+          <label for="email" class="form-label">Email Address</label>
+          <div class="input-group">
+            <span class="input-group-text bg-white border-end-0">
+              <i class="fa-regular fa-envelope text-muted"></i>
+            </span>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              class="form-control border-start-0 ps-0"
+              [(ngModel)]="email"
+              #emailField="ngModel"
+              required
+              email
+              placeholder="name@company.com"
+              autocomplete="email"
+            />
           </div>
 
+          <!-- Validation -->
+          <div
+            *ngIf="emailField.invalid && (emailField.dirty || emailField.touched)"
+            class="text-danger small mt-1"
+          >
+            <span *ngIf="emailField.errors?.['required']">Email address is required.</span>
+            <span *ngIf="emailField.errors?.['email']">Please enter a valid email address.</span>
+          </div>
         </div>
+
+        <!-- Password -->
+        <div class="mb-4">
+          <label for="password" class="form-label">Password</label>
+          <div class="input-group">
+            <span class="input-group-text bg-white border-end-0">
+              <i class="fa-solid fa-lock text-muted"></i>
+            </span>
+            <input
+              [type]="showPassword ? 'text' : 'password'"
+              id="password"
+              name="password"
+              class="form-control border-start-0 border-end-0 ps-0"
+              [(ngModel)]="password"
+              #passwordField="ngModel"
+              required
+              placeholder="Enter your password"
+              autocomplete="current-password"
+            />
+            <button
+              type="button"
+              class="btn btn-outline-secondary border-start-0"
+              (click)="togglePasswordVisibility()"
+              [title]="showPassword ? 'Hide password' : 'Show password'"
+              aria-label="Toggle password visibility"
+            >
+              <i class="fa-regular" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+            </button>
+          </div>
+
+          <div
+            *ngIf="passwordField.invalid && (passwordField.dirty || passwordField.touched)"
+            class="text-danger small mt-1"
+          >
+            <span *ngIf="passwordField.errors?.['required']">Password is required.</span>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <button
+          type="submit"
+          class="btn btn-primary w-100 py-2"
+          [disabled]="loginForm.invalid || loading"
+        >
+          <span *ngIf="loading" class="spinner-border spinner-border-sm me-2" role="status"></span>
+          <span>{{ loading ? 'Signing in...' : 'Sign in to Workspace' }}</span>
+        </button>
+      </form>
+
+      <!-- Footer switch link -->
+      <div class="text-center mt-4 pt-3 border-top">
+        <span class="text-muted small">Don't have an account? </span>
+        <a routerLink="/signup" class="small fw-semibold text-primary">
+          Create an account
+        </a>
       </div>
     </div>
   </div>

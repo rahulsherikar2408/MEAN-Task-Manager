@@ -1,135 +1,177 @@
-<div class="container mt-5 mb-5">
-  <div class="row justify-content-center">
-    <div class="col-md-6">
-      <div class="card shadow">
-        <div class="card-body">
+<div class="auth-page-container">
+  <div class="auth-card-wrap">
+    <!-- Brand Mark Header -->
+    <div class="text-center mb-4">
+      <div class="auth-brand-logo mb-2">
+        <i class="fa-solid fa-check-double"></i>
+      </div>
+      <h3 class="auth-brand-name">TaskFlow</h3>
+      <h4 class="auth-title mt-3 mb-1">Create your account</h4>
+      <p class="auth-subtitle">Get started with professional task management.</p>
+    </div>
 
-          <h3 class="text-center mb-4">Create Account</h3>
-
-          <form #signupForm="ngForm" (ngSubmit)="signup()">
-            
-            <div>
-              <label for="name" class="form-label">Name</label>
-              <input
-                type="text"
-                name="name"
-                class="form-control"
-                required
-                [(ngModel)]="name"
-                #nameField="ngModel"
-              />
-              <div
-                class="text-danger mt-1"
-                *ngIf="nameField && (nameField.dirty || nameField.touched)"
-              >
-                <small *ngIf="nameField.errors?.['required']"
-                  >Name is required.</small
-                >
-              </div>
-            </div>
-
-            <div>
-              <label for="email" class="form-label">Email</label>
-              <input
-                type="email"
-                name="email"
-                class="form-control"
-                required
-                email
-                [(ngModel)]="email"
-                #emailField="ngModel"
-              />
-              <div class="text-danger mt-1" *ngIf="emailField">
-                <div
-                  *ngIf="
-                    emailField.invalid &&
-                    (emailField.dirty || emailField.touched)
-                  "
-                >
-                  <small *ngIf="emailField.errors?.['required']"
-                    >Email is required</small
-                  >
-                  <small *ngIf="emailField.errors?.['email']"
-                    >Enter a valid email</small
-                  >
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <label for="password" class="form-label">Password</label>
-              <input
-                type="password"
-                name="password"
-                class="form-control"
-                required
-                minlength="8"
-                [(ngModel)]="password"
-                #passwordField="ngModel"
-              />
-              <div
-                class="text-danger mt-1"
-                *ngIf="
-                  passwordField.invalid &&
-                  (passwordField.dirty || passwordField.touched)
-                "
-              >
-                <small *ngIf="passwordField.errors?.['required']">
-                  Password is required.
-                </small>
-                <small *ngIf="passwordField.errors?.['minlength']">
-                  Password must be at least 8 characters.
-                </small>
-              </div>
-            </div>
-
-            <div>
-              <label for="confirmPassword" class="form-label">Confirm Password</label>
-              <input
-                type="password"
-                name="confirmPassword"
-                class="form-control"
-                required
-                minlength="8"
-                [(ngModel)]="confirmPassword"
-                #confirmPasswordField="ngModel"
-              />
-              <div
-                class="text-danger mt-1"
-                *ngIf="
-                  confirmPasswordField.invalid &&
-                  (confirmPasswordField.dirty || confirmPasswordField.touched)
-                "
-              >
-                <small *ngIf="confirmPasswordField.errors?.['required']">
-                  Password is required.
-                </small>
-                <small *ngIf="confirmPasswordField.errors?.['minlength']">
-                  Password must be at least 8 characters.
-                </small>
-              </div>
-            </div>
-
-            <button 
-                type="submit" 
-                class="btn btn-success w-100 mt-3" 
-                [disabled]="signupForm.invalid || loading"
-            >
-                <span 
-                    *ngIf="loading" 
-                    class="spinner-border spinner-border-sm me-2">
-                </span>
-                {{ loading ? 'Creating Account...' : 'Sign Up' }}
-            </button>
-
-          </form>
-
-          <div class="text-center mt-3">
-            Already have an account?
-            <a routerLink="/login">Login</a>
+    <!-- Signup Card -->
+    <div class="saas-card p-4 p-sm-5">
+      <form #signupForm="ngForm" (ngSubmit)="signup()">
+        <!-- Name -->
+        <div class="mb-3">
+          <label for="name" class="form-label">Full Name</label>
+          <div class="input-group">
+            <span class="input-group-text bg-white border-end-0">
+              <i class="fa-regular fa-user text-muted"></i>
+            </span>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              class="form-control border-start-0 ps-0"
+              [(ngModel)]="name"
+              #nameField="ngModel"
+              required
+              placeholder="e.g. Alex Morgan"
+              autocomplete="name"
+            />
           </div>
 
+          <div
+            *ngIf="nameField && (nameField.dirty || nameField.touched)"
+            class="text-danger small mt-1"
+          >
+            <span *ngIf="nameField.errors?.['required']">Full name is required.</span>
+          </div>
         </div>
+
+        <!-- Email -->
+        <div class="mb-3">
+          <label for="email" class="form-label">Email Address</label>
+          <div class="input-group">
+            <span class="input-group-text bg-white border-end-0">
+              <i class="fa-regular fa-envelope text-muted"></i>
+            </span>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              class="form-control border-start-0 ps-0"
+              [(ngModel)]="email"
+              #emailField="ngModel"
+              required
+              email
+              placeholder="name@company.com"
+              autocomplete="email"
+            />
+          </div>
+
+          <div
+            *ngIf="emailField && (emailField.dirty || emailField.touched)"
+            class="text-danger small mt-1"
+          >
+            <span *ngIf="emailField.errors?.['required']">Email address is required.</span>
+            <span *ngIf="emailField.errors?.['email']">Please enter a valid email address.</span>
+          </div>
+        </div>
+
+        <!-- Password -->
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+          <div class="input-group">
+            <span class="input-group-text bg-white border-end-0">
+              <i class="fa-solid fa-lock text-muted"></i>
+            </span>
+            <input
+              [type]="showPassword ? 'text' : 'password'"
+              id="password"
+              name="password"
+              class="form-control border-start-0 border-end-0 ps-0"
+              [(ngModel)]="password"
+              #passwordField="ngModel"
+              required
+              minlength="8"
+              placeholder="At least 8 characters"
+              autocomplete="new-password"
+            />
+            <button
+              type="button"
+              class="btn btn-outline-secondary border-start-0"
+              (click)="togglePasswordVisibility()"
+              [title]="showPassword ? 'Hide password' : 'Show password'"
+              aria-label="Toggle password visibility"
+            >
+              <i class="fa-regular" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+            </button>
+          </div>
+
+          <div
+            *ngIf="passwordField.invalid && (passwordField.dirty || passwordField.touched)"
+            class="text-danger small mt-1"
+          >
+            <span *ngIf="passwordField.errors?.['required']">Password is required.</span>
+            <span *ngIf="passwordField.errors?.['minlength']">Password must be at least 8 characters.</span>
+          </div>
+        </div>
+
+        <!-- Confirm Password -->
+        <div class="mb-4">
+          <label for="confirmPassword" class="form-label">Confirm Password</label>
+          <div class="input-group">
+            <span class="input-group-text bg-white border-end-0">
+              <i class="fa-solid fa-lock text-muted"></i>
+            </span>
+            <input
+              [type]="showConfirmPassword ? 'text' : 'password'"
+              id="confirmPassword"
+              name="confirmPassword"
+              class="form-control border-start-0 border-end-0 ps-0"
+              [(ngModel)]="confirmPassword"
+              #confirmPasswordField="ngModel"
+              required
+              minlength="8"
+              placeholder="Re-enter your password"
+              autocomplete="new-password"
+            />
+            <button
+              type="button"
+              class="btn btn-outline-secondary border-start-0"
+              (click)="toggleConfirmPasswordVisibility()"
+              [title]="showConfirmPassword ? 'Hide password' : 'Show password'"
+              aria-label="Toggle confirm password visibility"
+            >
+              <i class="fa-regular" [ngClass]="showConfirmPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+            </button>
+          </div>
+
+          <div
+            *ngIf="confirmPasswordField.invalid && (confirmPasswordField.dirty || confirmPasswordField.touched)"
+            class="text-danger small mt-1"
+          >
+            <span *ngIf="confirmPasswordField.errors?.['required']">Confirm password is required.</span>
+            <span *ngIf="confirmPasswordField.errors?.['minlength']">Password must be at least 8 characters.</span>
+          </div>
+          <div
+            *ngIf="confirmPassword && password && confirmPassword !== password && (confirmPasswordField.dirty || confirmPasswordField.touched)"
+            class="text-danger small mt-1"
+          >
+            <span>Passwords do not match.</span>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <button
+          type="submit"
+          class="btn btn-primary w-100 py-2"
+          [disabled]="signupForm.invalid || loading || password !== confirmPassword"
+        >
+          <span *ngIf="loading" class="spinner-border spinner-border-sm me-2" role="status"></span>
+          <span>{{ loading ? 'Creating Account...' : 'Create Account' }}</span>
+        </button>
+      </form>
+
+      <!-- Footer switch link -->
+      <div class="text-center mt-4 pt-3 border-top">
+        <span class="text-muted small">Already have an account? </span>
+        <a routerLink="/login" class="small fw-semibold text-primary">
+          Sign in
+        </a>
       </div>
     </div>
   </div>

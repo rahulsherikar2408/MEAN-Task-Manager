@@ -1,41 +1,192 @@
-.dashboard-card {
-  transition: transform 0.2s ease,
-              box-shadow 0.2s ease;
+/* ==========================================================================
+   DASHBOARD COMPONENT STYLES
+   ========================================================================== */
+
+.dashboard-hero-header {
+  padding-bottom: 0.5rem;
 }
 
-.dashboard-card:hover {
-  transform: translateY(-3px);
+.greeting-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--slate-500);
 }
 
-.dashboard-icon {
-  width: 48px;
-  height: 48px;
+.hero-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--slate-900);
+  letter-spacing: -0.03em;
+}
 
+.hero-name {
+  color: var(--primary);
+}
+
+.hero-subtitle {
+  font-size: 0.95rem;
+  color: var(--slate-500);
+}
+
+/* Stat Cards */
+.stat-card {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--border-hover);
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: transparent;
+}
+
+.stat-total::before {
+  background: linear-gradient(90deg, #6366f1, #4f46e5);
+}
+
+.stat-todo::before {
+  background: var(--slate-400);
+}
+
+.stat-progress::before {
+  background: #3b82f6;
+}
+
+.stat-completed::before {
+  background: #10b981;
+}
+
+.stat-label {
+  font-size: 0.825rem;
+  font-weight: 600;
+  color: var(--slate-500);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  display: block;
+  margin-bottom: 0.35rem;
+}
+
+.stat-value {
+  font-size: 2.15rem;
+  font-weight: 800;
+  color: var(--slate-900);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  margin-bottom: 0.25rem;
+}
+
+.stat-subtext {
+  font-size: 0.775rem;
+  color: var(--slate-400);
+}
+
+.stat-icon-box {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-
-  border-radius: 12px;
-
-  font-size: 20px;
+  font-size: 1.25rem;
+  flex-shrink: 0;
 }
 
-.task-row {
-  transition: background-color 0.2s ease;
+.bg-indigo-light {
+  background-color: var(--primary-50);
+}
+.text-indigo {
+  color: var(--primary);
 }
 
-.task-row:hover {
-  background-color: #f8f9fa;
+.bg-slate-light {
+  background-color: var(--slate-100);
+}
+.text-slate {
+  color: var(--slate-600);
 }
 
-.task-info {
+.bg-blue-light {
+  background-color: #eff6ff;
+}
+.text-blue {
+  color: #2563eb;
+}
+
+.bg-emerald-light {
+  background-color: #ecfdf5;
+}
+.text-emerald {
+  color: #059669;
+}
+
+/* Recent Tasks Row */
+.recent-task-row {
+  background-color: #ffffff;
+  border: 1px solid var(--border-color);
   cursor: pointer;
+  transition: all 0.15s ease;
 }
 
-.task-info h6 {
-  transition: color 0.2s ease;
+.recent-task-row:hover {
+  background-color: var(--slate-50);
+  border-color: var(--border-hover);
+  transform: translateX(2px);
 }
 
-.task-info:hover h6 {
-  color: #0d6efd;
+.recent-task-row:hover .recent-task-title {
+  color: var(--primary);
+}
+
+.recent-task-title {
+  font-size: 0.925rem;
+  font-weight: 600;
+  color: var(--slate-800);
+  transition: color 0.15s ease;
+}
+
+/* Overdue Alert Section */
+.bg-danger-subtle-50 {
+  background-color: #fffbfa;
+}
+
+.overdue-item {
+  border-color: #fee2e2 !important;
+  transition: all 0.15s ease;
+}
+
+.overdue-item:hover {
+  border-color: #fca5a5 !important;
+  box-shadow: var(--shadow-sm);
+}
+
+.overdue-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--danger);
+  flex-shrink: 0;
+}
+
+.task-link {
+  color: var(--slate-900);
+  transition: color 0.15s ease;
+}
+
+.task-link:hover {
+  color: var(--primary);
 }

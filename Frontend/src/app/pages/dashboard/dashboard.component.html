@@ -1,46 +1,73 @@
-<div class="container-fluid px-3 px-md-4 py-4">
-  <!-- Header -->
-  <div class="d-flex justify-content-between flex-wrap align-items-center gap-3 mb-4">
-    <div>
-      <h2 class="fw-bold mb-1">Dashboard</h2>
-      <p class="text-muted mb-0">Here's an overview of your tasks.</p>
+<div class="app-container py-4">
+  <!-- Dashboard Page Header -->
+  <div class="dashboard-hero-header mb-4">
+    <div class="d-flex justify-content-between flex-wrap align-items-center gap-3">
+      <div>
+        <div class="greeting-badge mb-1">
+          <i class="fa-regular fa-sun text-warning me-1"></i>
+          <span>Overview</span>
+        </div>
+        <h2 class="hero-title mb-1">
+          {{ getGreeting() }}, <span class="hero-name">{{ getUserName() }}</span>
+        </h2>
+        <p class="hero-subtitle mb-0">
+          Here's an overview of your tasks and workspace activity.
+        </p>
+      </div>
+
+      <div class="d-flex align-items-center gap-2">
+        <a routerLink="/kanban" class="btn btn-outline-secondary">
+          <i class="fa-solid fa-table-columns"></i>
+          <span>Kanban</span>
+        </a>
+        <button class="btn btn-primary" (click)="createTask()">
+          <i class="fa-solid fa-plus"></i>
+          <span>New Task</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading Skeleton -->
+  <div *ngIf="loading" class="dashboard-loading py-5">
+    <div class="row g-3 mb-4">
+      <div class="col-12 col-sm-6 col-xl-3" *ngFor="let i of [1,2,3,4]">
+        <div class="saas-card p-4">
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="w-50">
+              <div class="skeleton-shimmer mb-2" style="height: 14px; width: 60%;"></div>
+              <div class="skeleton-shimmer" style="height: 32px; width: 40%;"></div>
+            </div>
+            <div class="skeleton-shimmer rounded-3" style="width: 48px; height: 48px;"></div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <button class="btn btn-primary" (click)="createTask()">
-      <i class="fa-solid fa-plus me-2"></i>
-      Add Task
-    </button>
+    <div class="text-center py-4">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading dashboard...</span>
+      </div>
+      <p class="text-muted mt-2 small">Loading workspace data...</p>
+    </div>
   </div>
 
-  <!-- Loading -->
-  <div *ngIf="loading" class="text-center py-5">
-    <div class="spinner-border text-primary"></div>
-
-    <p class="text-muted mt-2">Loading dashboard...</p>
-  </div>
-
-  <!-- Dashboard -->
-  <div *ngIf="!loading && dashboard">
-    <!-- ======================= -->
-    <!-- Statistics -->
-    <!-- ======================= -->
-
+  <!-- Dashboard Content -->
+  <div *ngIf="!loading && dashboard" class="dashboard-content">
+    <!-- Primary Statistics Cards (4 Columns) -->
     <div class="row g-3 mb-4">
-      <!-- Total -->
+      <!-- Total Tasks -->
       <div class="col-12 col-sm-6 col-xl-3">
-        <div class="card dashboard-card border-0 shadow-sm h-100">
-          <div class="card-body">
-            <div class="d-flex justify-content-between align-items-center">
+        <div class="saas-card stat-card stat-total h-100">
+          <div class="card-body p-4">
+            <div class="d-flex justify-content-between align-items-start">
               <div>
-                <p class="text-muted mb-1">Total Tasks</p>
-
-                <h2 class="fw-bold mb-0">
-                  {{ dashboard.stats.total }}
-                </h2>
+                <span class="stat-label">Total Tasks</span>
+                <div class="stat-value">{{ dashboard.stats.total }}</div>
+                <span class="stat-subtext">All active & finished</span>
               </div>
-
-              <div class="dashboard-icon bg-primary-subtle text-primary">
-                <i class="fa-solid fa-list-check"></i>
+              <div class="stat-icon-box bg-indigo-light text-indigo">
+                <i class="fa-solid fa-layer-group"></i>
               </div>
             </div>
           </div>
@@ -49,19 +76,16 @@
 
       <!-- To Do -->
       <div class="col-12 col-sm-6 col-xl-3">
-        <div class="card dashboard-card border-0 shadow-sm h-100">
-          <div class="card-body">
-            <div class="d-flex justify-content-between align-items-center">
+        <div class="saas-card stat-card stat-todo h-100">
+          <div class="card-body p-4">
+            <div class="d-flex justify-content-between align-items-start">
               <div>
-                <p class="text-muted mb-1">To Do</p>
-
-                <h2 class="fw-bold mb-0">
-                  {{ dashboard.stats.todo }}
-                </h2>
+                <span class="stat-label">To Do</span>
+                <div class="stat-value">{{ dashboard.stats.todo }}</div>
+                <span class="stat-subtext">Waiting to be started</span>
               </div>
-
-              <div class="dashboard-icon bg-secondary-subtle text-secondary">
-                <i class="fa-regular fa-circle"></i>
+              <div class="stat-icon-box bg-slate-light text-slate">
+                <i class="fa-regular fa-circle-dot"></i>
               </div>
             </div>
           </div>
@@ -70,18 +94,15 @@
 
       <!-- In Progress -->
       <div class="col-12 col-sm-6 col-xl-3">
-        <div class="card dashboard-card border-0 shadow-sm h-100">
-          <div class="card-body">
-            <div class="d-flex justify-content-between align-items-center">
+        <div class="saas-card stat-card stat-progress h-100">
+          <div class="card-body p-4">
+            <div class="d-flex justify-content-between align-items-start">
               <div>
-                <p class="text-muted mb-1">In Progress</p>
-
-                <h2 class="fw-bold mb-0">
-                  {{ dashboard.stats.inProgress }}
-                </h2>
+                <span class="stat-label">In Progress</span>
+                <div class="stat-value">{{ dashboard.stats.inProgress }}</div>
+                <span class="stat-subtext">Currently working on</span>
               </div>
-
-              <div class="dashboard-icon bg-info-subtle text-info">
+              <div class="stat-icon-box bg-blue-light text-blue">
                 <i class="fa-solid fa-spinner"></i>
               </div>
             </div>
@@ -91,18 +112,15 @@
 
       <!-- Completed -->
       <div class="col-12 col-sm-6 col-xl-3">
-        <div class="card dashboard-card border-0 shadow-sm h-100">
-          <div class="card-body">
-            <div class="d-flex justify-content-between align-items-center">
+        <div class="saas-card stat-card stat-completed h-100">
+          <div class="card-body p-4">
+            <div class="d-flex justify-content-between align-items-start">
               <div>
-                <p class="text-muted mb-1">Completed</p>
-
-                <h2 class="fw-bold mb-0">
-                  {{ dashboard.stats.completed }}
-                </h2>
+                <span class="stat-label">Completed</span>
+                <div class="stat-value">{{ dashboard.stats.completed }}</div>
+                <span class="stat-subtext text-success">Finished tasks</span>
               </div>
-
-              <div class="dashboard-icon bg-success-subtle text-success">
+              <div class="stat-icon-box bg-emerald-light text-emerald">
                 <i class="fa-solid fa-circle-check"></i>
               </div>
             </div>
@@ -111,184 +129,207 @@
       </div>
     </div>
 
-    <!-- ======================= -->
-    <!-- Secondary Statistics -->
-    <!-- ======================= -->
-
+    <!-- Secondary Insights Row -->
     <div class="row g-3 mb-4">
-      <!-- Overdue -->
+      <!-- Overdue Tasks Card -->
       <div class="col-12 col-md-4">
-        <div class="card border-0 shadow-sm h-100">
-          <div class="card-body">
-            <div class="d-flex justify-content-between">
-              <div>
-                <p class="text-muted mb-1">Overdue</p>
-
-                <h3
-                  class="fw-bold mb-0"
-                  [class.text-danger]="dashboard.stats.overdue > 0"
-                >
-                  {{ dashboard.stats.overdue }}
-                </h3>
-              </div>
-
-              <i class="fa-solid fa-triangle-exclamation text-danger fs-3"></i>
-            </div>
+        <div class="saas-card h-100 p-4" [class.border-danger-subtle]="dashboard.stats.overdue > 0">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="stat-label mb-0">Overdue Tasks</span>
+            <span
+              class="badge-pill"
+              [ngClass]="dashboard.stats.overdue > 0 ? 'badge-priority-urgent' : 'badge-priority-low'"
+            >
+              {{ dashboard.stats.overdue > 0 ? 'Needs Attention' : 'All On Track' }}
+            </span>
+          </div>
+          <div class="d-flex align-items-baseline gap-2">
+            <span
+              class="stat-value fs-2 mb-0"
+              [class.text-danger]="dashboard.stats.overdue > 0"
+            >
+              {{ dashboard.stats.overdue }}
+            </span>
+            <span class="text-muted small">tasks past due date</span>
           </div>
         </div>
       </div>
 
-      <!-- Due Today -->
+      <!-- Due Today Card -->
       <div class="col-12 col-md-4">
-        <div class="card border-0 shadow-sm h-100">
-          <div class="card-body">
-            <div class="d-flex justify-content-between">
-              <div>
-                <p class="text-muted mb-1">Due Today</p>
-
-                <h3 class="fw-bold mb-0">
-                  {{ dashboard.stats.dueToday }}
-                </h3>
-              </div>
-
-              <i class="fa-solid fa-calendar-day text-warning fs-3"></i>
-            </div>
+        <div class="saas-card h-100 p-4">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="stat-label mb-0">Due Today</span>
+            <span class="badge-pill badge-priority-high">
+              <i class="fa-regular fa-clock me-1"></i> Today
+            </span>
+          </div>
+          <div class="d-flex align-items-baseline gap-2">
+            <span class="stat-value fs-2 mb-0 text-warning">{{ dashboard.stats.dueToday }}</span>
+            <span class="text-muted small">due before end of day</span>
           </div>
         </div>
       </div>
 
-      <!-- Completion -->
+      <!-- Completion Rate Card -->
       <div class="col-12 col-md-4">
-        <div class="card border-0 shadow-sm h-100">
-          <div class="card-body">
-            <p class="text-muted mb-1">Completion Rate</p>
+        <div class="saas-card h-100 p-4">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="stat-label mb-0">Completion Rate</span>
+            <span class="fw-bold text-success">{{ getCompletionPercentage() }}%</span>
+          </div>
+          <div class="progress mb-2" style="height: 8px; border-radius: 4px; background-color: var(--slate-100);">
+            <div
+              class="progress-bar bg-success"
+              role="progressbar"
+              [style.width.%]="getCompletionPercentage()"
+              [attr.aria-valuenow]="getCompletionPercentage()"
+              aria-valuemin="0"
+              aria-valuemax="100"
+            ></div>
+          </div>
+          <span class="text-muted small">
+            {{ dashboard.stats.completed }} of {{ dashboard.stats.total }} total tasks resolved
+          </span>
+        </div>
+      </div>
+    </div>
 
-            <h3 class="fw-bold">{{ getCompletionPercentage() }}%</h3>
+    <!-- Priority Overview Bar -->
+    <div class="saas-card p-4 mb-4" *ngIf="dashboard.stats.total > 0">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h6 class="fw-semibold mb-0 text-slate-800">
+          <i class="fa-solid fa-flag me-2 text-primary"></i>
+          Priority Distribution
+        </h6>
+        <span class="text-muted small">High & Urgent priority load</span>
+      </div>
 
-            <div class="progress" style="height: 8px">
-              <div
-                class="progress-bar bg-success"
-                role="progressbar"
-                [style.width.%]="getCompletionPercentage()"
-              ></div>
-            </div>
+      <div class="row g-3">
+        <div class="col-12 col-md-6">
+          <div class="d-flex justify-content-between align-items-center mb-1 small">
+            <span class="fw-medium text-slate-700">High Priority</span>
+            <span class="fw-bold text-slate-900">{{ dashboard.stats.highPriority }} tasks</span>
+          </div>
+          <div class="progress" style="height: 6px; border-radius: 3px; background-color: var(--slate-100);">
+            <div
+              class="progress-bar bg-warning"
+              [style.width.%]="dashboard.stats.total ? (dashboard.stats.highPriority / dashboard.stats.total) * 100 : 0"
+            ></div>
+          </div>
+        </div>
+
+        <div class="col-12 col-md-6">
+          <div class="d-flex justify-content-between align-items-center mb-1 small">
+            <span class="fw-medium text-slate-700">Urgent Priority</span>
+            <span class="fw-bold text-danger">{{ dashboard.stats.urgentPriority }} tasks</span>
+          </div>
+          <div class="progress" style="height: 6px; border-radius: 3px; background-color: var(--slate-100);">
+            <div
+              class="progress-bar bg-danger"
+              [style.width.%]="dashboard.stats.total ? (dashboard.stats.urgentPriority / dashboard.stats.total) * 100 : 0"
+            ></div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- ======================= -->
-    <!-- Priority -->
-    <!-- ======================= -->
-
-    <div class="row g-3 mb-4">
-      <div class="col-12">
-        <div class="card border-0 shadow-sm">
-          <div class="card-body">
-            <h5 class="fw-bold mb-3">Priority Overview</h5>
-
-            <div class="row">
-              <div class="col-md-6">
-                <div class="d-flex justify-content-between mb-2">
-                  <span> High Priority </span>
-
-                  <strong>
-                    {{ dashboard.stats.highPriority }}
-                  </strong>
-                </div>
-
-                <div class="progress mb-3" style="height: 8px">
-                  <div
-                    class="progress-bar bg-danger"
-                    [style.width.%]="
-                      dashboard.stats.total
-                        ? (dashboard.stats.highPriority /
-                            dashboard.stats.total) *
-                          100
-                        : 0
-                    "
-                  ></div>
-                </div>
-              </div>
-
-              <div class="col-md-6">
-                <div class="d-flex justify-content-between mb-2">
-                  <span> Urgent Priority </span>
-
-                  <strong>
-                    {{ dashboard.stats.urgentPriority }}
-                  </strong>
-                </div>
-
-                <div class="progress mb-3" style="height: 8px">
-                  <div
-                    class="progress-bar bg-dark"
-                    [style.width.%]="
-                      dashboard.stats.total
-                        ? (dashboard.stats.urgentPriority /
-                            dashboard.stats.total) *
-                          100
-                        : 0
-                    "
-                  ></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+    <!-- Overdue Alert Section (When Overdue Tasks Exist) -->
+    <div class="saas-card border-danger-subtle bg-danger-subtle-50 p-4 mb-4" *ngIf="dashboard.overdueTasks.length > 0">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h6 class="fw-bold text-danger mb-0 d-flex align-items-center gap-2">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+          Overdue Tasks Requiring Action ({{ dashboard.overdueTasks.length }})
+        </h6>
       </div>
-    </div>
 
-    <!-- ======================= -->
-    <!-- Tasks -->
-    <!-- ======================= -->
-
-    <div class="row g-4">
-      <!-- Recent Tasks -->
-      <div class="col-12 col-lg-6">
-        <div class="card border-0 shadow-sm h-100">
-          <div class="card-body">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-              <h5 class="fw-bold mb-0">Recent Tasks</h5>
-
-              <a routerLink="/my-tasks" class="text-decoration-none">
-                View All
+      <div class="list-group list-group-flush bg-transparent">
+        <div
+          *ngFor="let task of dashboard.overdueTasks"
+          class="list-group-item bg-white rounded-3 border mb-2 p-3 d-flex justify-content-between align-items-center flex-wrap gap-2 overdue-item"
+        >
+          <div class="d-flex align-items-center gap-3">
+            <div class="overdue-dot"></div>
+            <div>
+              <a
+                [routerLink]="['/tasks', task._id]"
+                class="fw-semibold text-slate-900 text-decoration-none task-link"
+              >
+                {{ task.title }}
               </a>
+              <div class="d-flex align-items-center gap-2 mt-1">
+                <span class="badge-pill badge-priority-urgent">Overdue</span>
+                <span class="text-danger small" *ngIf="task.dueDate">
+                  <i class="fa-regular fa-calendar me-1"></i>
+                  Due {{ task.dueDate | date: 'mediumDate' }}
+                </span>
+              </div>
             </div>
+          </div>
 
-            <div *ngIf="dashboard.recentTasks.length; else noRecentTasks">
+          <button class="btn btn-outline-danger btn-sm" (click)="viewTask(task._id!)">
+            View Task
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tasks Grid: Recent Tasks & Upcoming Tasks -->
+    <div class="row g-4">
+      <!-- Recent Tasks Column -->
+      <div class="col-12 col-lg-6">
+        <div class="saas-card h-100">
+          <div class="card-header-clean">
+            <h6 class="fw-bold mb-0 text-slate-900">
+              <i class="fa-solid fa-clock-rotate-left me-2 text-primary"></i>
+              Recent Tasks
+            </h6>
+            <a routerLink="/my-tasks" class="btn btn-sm btn-outline-secondary">
+              View All
+              <i class="fa-solid fa-arrow-right ms-1"></i>
+            </a>
+          </div>
+
+          <div class="p-3">
+            <div *ngIf="dashboard.recentTasks.length; else noRecentTasks" class="d-flex flex-column gap-2">
               <div
                 *ngFor="let task of dashboard.recentTasks"
-                class="task-row border-bottom py-3"
+                class="recent-task-row p-3 rounded-3"
+                (click)="viewTask(task._id!)"
               >
-                <div class="d-flex justify-content-between align-items-center">
-                  <div class="task-info" (click)="viewTask(task._id!)">
-                    <h6 class="mb-1">
+                <div class="d-flex justify-content-between align-items-start gap-2">
+                  <div class="text-truncate">
+                    <h6 class="recent-task-title text-truncate mb-1">
                       {{ task.title }}
                     </h6>
-
-                    <small class="text-muted">
-                      {{ task.category }}
-                    </small>
+                    <div class="d-flex align-items-center gap-2 flex-wrap">
+                      <span class="badge-category">
+                        <i class="fa-solid fa-folder me-1 text-muted"></i>
+                        {{ task.category || 'Other' }}
+                      </span>
+                      <span *ngIf="task.dueDate" class="badge-date">
+                        <i class="fa-regular fa-calendar me-1"></i>
+                        {{ task.dueDate | date: 'shortDate' }}
+                      </span>
+                    </div>
                   </div>
 
                   <div>
                     <span
-                      class="badge"
+                      class="badge-pill"
                       [ngClass]="{
-                        'bg-secondary': task.status === 'TODO',
-
-                        'bg-primary': task.status === 'IN_PROGRESS',
-
-                        'bg-success': task.status === 'COMPLETED',
+                        'badge-status-todo': task.status === 'TODO',
+                        'badge-status-progress': task.status === 'IN_PROGRESS',
+                        'badge-status-completed': task.status === 'COMPLETED'
                       }"
                     >
+                      <span class="badge-dot"></span>
                       {{
-                        task.status === "TODO"
-                          ? "To Do"
-                          : task.status === "IN_PROGRESS"
-                            ? "In Progress"
-                            : "Completed"
+                        task.status === 'TODO'
+                          ? 'To Do'
+                          : task.status === 'IN_PROGRESS'
+                          ? 'In Progress'
+                          : 'Completed'
                       }}
                     </span>
                   </div>
@@ -297,99 +338,86 @@
             </div>
 
             <ng-template #noRecentTasks>
-              <div class="text-center text-muted py-4">No tasks yet.</div>
+              <div class="empty-state py-4 my-2">
+                <div class="empty-state-icon">
+                  <i class="fa-regular fa-folder-open"></i>
+                </div>
+                <h6 class="empty-state-title">No recent tasks</h6>
+                <p class="empty-state-desc mb-3">You haven't created any tasks yet.</p>
+                <button class="btn btn-primary btn-sm" (click)="createTask()">
+                  <i class="fa-solid fa-plus me-1"></i>
+                  Create First Task
+                </button>
+              </div>
             </ng-template>
           </div>
         </div>
       </div>
 
-      <!-- Upcoming Tasks -->
+      <!-- Upcoming Tasks Column -->
       <div class="col-12 col-lg-6">
-        <div class="card border-0 shadow-sm h-100">
-          <div class="card-body">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-              <h5 class="fw-bold mb-0">Upcoming Tasks</h5>
-
-              <span class="badge bg-primary">
+        <div class="saas-card h-100">
+          <div class="card-header-clean">
+            <div class="d-flex align-items-center gap-2">
+              <h6 class="fw-bold mb-0 text-slate-900">
+                <i class="fa-regular fa-calendar-check me-2 text-primary"></i>
+                Upcoming Tasks
+              </h6>
+              <span class="badge bg-primary-subtle text-primary fw-semibold rounded-pill px-2">
                 {{ dashboard.stats.upcoming }}
               </span>
             </div>
+            <a routerLink="/kanban" class="btn btn-sm btn-outline-secondary">
+              Board
+            </a>
+          </div>
 
-            <div *ngIf="dashboard.upcomingTasks.length; else noUpcomingTasks">
+          <div class="p-3">
+            <div *ngIf="dashboard.upcomingTasks.length; else noUpcomingTasks" class="d-flex flex-column gap-2">
               <div
                 *ngFor="let task of dashboard.upcomingTasks"
-                class="task-row border-bottom py-3"
+                class="recent-task-row p-3 rounded-3"
+                (click)="viewTask(task._id!)"
               >
-                <div class="d-flex justify-content-between align-items-center">
-                  <div class="task-info" (click)="viewTask(task._id!)">
-                    <h6 class="mb-1">
+                <div class="d-flex justify-content-between align-items-start gap-2">
+                  <div class="text-truncate">
+                    <h6 class="recent-task-title text-truncate mb-1">
                       {{ task.title }}
                     </h6>
-
-                    <small class="text-muted">
-                      Due:
-                      {{ task.dueDate | date: "mediumDate" }}
-                    </small>
+                    <div class="d-flex align-items-center gap-2 flex-wrap">
+                      <span class="badge-date" *ngIf="task.dueDate">
+                        <i class="fa-regular fa-calendar me-1"></i>
+                        Due: {{ task.dueDate | date: 'mediumDate' }}
+                      </span>
+                    </div>
                   </div>
 
-                  <span
-                    class="badge"
-                    [ngClass]="{
-                      'bg-success': task.priority === 'LOW',
-
-                      'bg-warning text-dark': task.priority === 'MEDIUM',
-
-                      'bg-danger': task.priority === 'HIGH',
-
-                      'bg-dark': task.priority === 'URGENT',
-                    }"
-                  >
-                    {{ task.priority }}
-                  </span>
+                  <div>
+                    <span
+                      class="badge-pill"
+                      [ngClass]="{
+                        'badge-priority-low': task.priority === 'LOW',
+                        'badge-priority-medium': task.priority === 'MEDIUM',
+                        'badge-priority-high': task.priority === 'HIGH',
+                        'badge-priority-urgent': task.priority === 'URGENT'
+                      }"
+                    >
+                      {{ task.priority }}
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
 
             <ng-template #noUpcomingTasks>
-              <div class="text-center text-muted py-4">No upcoming tasks.</div>
+              <div class="empty-state py-4 my-2">
+                <div class="empty-state-icon">
+                  <i class="fa-regular fa-calendar"></i>
+                </div>
+                <h6 class="empty-state-title">No upcoming deadlines</h6>
+                <p class="empty-state-desc mb-0">All upcoming items have been taken care of.</p>
+              </div>
             </ng-template>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ======================= -->
-    <!-- Overdue -->
-    <!-- ======================= -->
-
-    <div
-      class="card border-0 shadow-sm mt-4"
-      *ngIf="dashboard.overdueTasks.length > 0"
-    >
-      <div class="card-body">
-        <h5 class="fw-bold text-danger mb-3">
-          <i class="fa-solid fa-triangle-exclamation me-2"></i>
-
-          Overdue Tasks
-        </h5>
-
-        <div
-          *ngFor="let task of dashboard.overdueTasks"
-          class="task-row border-bottom py-3"
-        >
-          <div class="d-flex justify-content-between align-items-center">
-            <div class="task-info" (click)="viewTask(task._id!)">
-              <h6 class="mb-1">
-                {{ task.title }}
-              </h6>
-
-              <small class="text-danger">
-                Due:
-                {{ task.dueDate | date: "mediumDate" }}
-              </small>
-            </div>
-
-            <span class="badge bg-danger"> Overdue </span>
           </div>
         </div>
       </div>

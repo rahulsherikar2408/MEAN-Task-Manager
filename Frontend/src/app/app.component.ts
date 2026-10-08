@@ -8,7 +8,7 @@ import { TaskService } from './services/task.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-
+  title = 'Angular-Todo-App';
   isLoading$ = this.loadingService.loading$;
 
   constructor(

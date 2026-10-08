@@ -1,106 +1,221 @@
-<nav
-  class="navbar navbar-expand-lg bg-body-tertiary fixed-top"
-  data-bs-theme="dark"
->
-  <div class="container-fluid">
-    <!-- Brand -->
+<header class="app-navbar-header">
+  <div class="navbar-inner container-fluid">
+    <!-- Brand / Logo (Left) -->
+    <a routerLink="/" class="navbar-brand-group" (click)="closeMobileMenu()">
+      <div class="brand-icon-box">
+        <i class="fa-solid fa-check-double"></i>
+      </div>
+      <div class="brand-text-wrap">
+        <span class="brand-title">TaskFlow</span>
+        <span class="brand-badge">PRO</span>
+      </div>
+    </a>
 
-    <a class="navbar-brand" routerLink="/"> Angular Todo List </a>
+    <!-- Desktop Navigation Links (Center) -->
+    <nav class="desktop-nav" *ngIf="authService.isLoggedIn()">
+      <a
+        routerLink="/"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="nav-tab-link"
+      >
+        <i class="fa-solid fa-chart-pie"></i>
+        <span>Dashboard</span>
+      </a>
 
-    <!-- Mobile Toggle -->
+      <a
+        routerLink="/my-tasks"
+        routerLinkActive="active"
+        class="nav-tab-link"
+      >
+        <i class="fa-solid fa-list-check"></i>
+        <span>My Tasks</span>
+      </a>
 
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarNavDropdown"
-      aria-controls="navbarNavDropdown"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <span class="navbar-toggler-icon"></span>
-    </button>
+      <a
+        routerLink="/kanban"
+        routerLinkActive="active"
+        class="nav-tab-link"
+      >
+        <i class="fa-solid fa-table-columns"></i>
+        <span>Kanban</span>
+      </a>
+    </nav>
 
-    <div class="collapse navbar-collapse" id="navbarNavDropdown">
-      <ul class="navbar-nav">
-        <!-- Home -->
+    <!-- Right Actions / Profile -->
+    <div class="navbar-right-actions">
+      <!-- When Logged In -->
+      <ng-container *ngIf="authService.isLoggedIn()">
+        <!-- Quick New Task Button (Desktop) -->
+        <a routerLink="/task/new" class="btn btn-primary btn-sm d-none d-sm-inline-flex">
+          <i class="fa-solid fa-plus"></i>
+          <span>New Task</span>
+        </a>
 
-        <li class="nav-item">
-          <a
-            class="nav-link"
-            routerLink="/"
-            routerLinkActive="active"
-            [routerLinkActiveOptions]="{ exact: true }"
-          >
-            Dashboard
-          </a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/task/new" routerLinkActive="active">
-            Add Task
-          </a>
-        </li>
-
-        <!-- My Todos -->
-
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/my-tasks" routerLinkActive="active">
-            My Tasks
-          </a>
-        </li>
-
-        <!-- Kanban -->
-        <li class="nav-item">
-          <a routerLink="/kanban" routerLinkActive="active" class="nav-link">
-            <i class="fa-solid fa-table-columns me-1"></i>
-            Kanban
-          </a>
-        </li>
-
-        <!-- Username Dropdown - Logged In -->
-
-        <li class="nav-item dropdown" *ngIf="authService.isLoggedIn()">
-          <a
-            class="nav-link dropdown-toggle"
-            href="javascript:void(0)"
-            id="userDropdown"
-            role="button"
+        <!-- User Profile Dropdown -->
+        <div class="dropdown">
+          <button
+            class="user-profile-trigger"
+            type="button"
+            id="userProfileDropdown"
             data-bs-toggle="dropdown"
             aria-expanded="false"
           >
-            {{ authService.getUser()?.name }}
-          </a>
+            <div class="avatar-circle">
+              {{ getUserInitials() }}
+            </div>
+            <div class="user-meta d-none d-md-flex">
+              <span class="user-name">{{ authService.getUser()?.name }}</span>
+              <i class="fa-solid fa-chevron-down chevron-icon"></i>
+            </div>
+          </button>
 
-          <ul class="dropdown-menu" aria-labelledby="userDropdown">
+          <ul class="dropdown-menu dropdown-menu-end profile-dropdown-menu shadow-lg border-0" aria-labelledby="userProfileDropdown">
+            <li class="dropdown-header-user">
+              <div class="d-flex align-items-center gap-2">
+                <div class="avatar-circle-sm">
+                  {{ getUserInitials() }}
+                </div>
+                <div class="text-truncate">
+                  <div class="dropdown-user-name text-truncate">{{ authService.getUser()?.name }}</div>
+                  <div class="dropdown-user-email text-truncate">{{ authService.getUser()?.email }}</div>
+                </div>
+              </div>
+            </li>
+            <li><hr class="dropdown-divider my-1" /></li>
             <li>
-              <button
-                type="button"
-                class="dropdown-item text-danger"
-                (click)="logout()"
-              >
-                Logout
+              <a class="dropdown-item" routerLink="/" (click)="closeMobileMenu()">
+                <i class="fa-solid fa-chart-pie me-2 text-muted"></i>
+                Dashboard
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" routerLink="/my-tasks" (click)="closeMobileMenu()">
+                <i class="fa-solid fa-list-check me-2 text-muted"></i>
+                My Tasks
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" routerLink="/kanban" (click)="closeMobileMenu()">
+                <i class="fa-solid fa-table-columns me-2 text-muted"></i>
+                Kanban Board
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" routerLink="/task/new" (click)="closeMobileMenu()">
+                <i class="fa-solid fa-plus me-2 text-muted"></i>
+                Create Task
+              </a>
+            </li>
+            <li><hr class="dropdown-divider my-1" /></li>
+            <li>
+              <button type="button" class="dropdown-item text-danger logout-btn" (click)="logout()">
+                <i class="fa-solid fa-arrow-right-from-bracket me-2"></i>
+                Sign out
               </button>
             </li>
           </ul>
-        </li>
+        </div>
+      </ng-container>
 
-        <!-- Create Account - Logged Out -->
+      <!-- When Logged Out -->
+      <ng-container *ngIf="!authService.isLoggedIn()">
+        <a routerLink="/login" class="btn btn-outline-secondary btn-sm">
+          Log in
+        </a>
+        <a routerLink="/signup" class="btn btn-primary btn-sm">
+          Get Started
+        </a>
+      </ng-container>
 
-        <li class="nav-item" *ngIf="!authService.isLoggedIn()">
-          <a class="nav-link" routerLink="/signup" routerLinkActive="active">
-            Create Account
-          </a>
-        </li>
-
-        <!-- Login - Logged Out -->
-
-        <li class="nav-item" *ngIf="!authService.isLoggedIn()">
-          <a class="nav-link" routerLink="/login" routerLinkActive="active">
-            Login
-          </a>
-        </li>
-      </ul>
+      <!-- Mobile Hamburger Button -->
+      <button
+        class="mobile-menu-toggle d-lg-none"
+        type="button"
+        (click)="toggleMobileMenu()"
+        [attr.aria-expanded]="isMobileMenuOpen"
+        aria-label="Toggle navigation"
+      >
+        <i class="fa-solid" [ngClass]="isMobileMenuOpen ? 'fa-xmark' : 'fa-bars'"></i>
+      </button>
     </div>
   </div>
-</nav>
+
+  <!-- Mobile Collapsible Menu -->
+  <div class="mobile-collapse-menu d-lg-none" [class.is-open]="isMobileMenuOpen">
+    <div class="mobile-menu-inner">
+      <ng-container *ngIf="authService.isLoggedIn()">
+        <div class="mobile-user-card mb-3">
+          <div class="avatar-circle">
+            {{ getUserInitials() }}
+          </div>
+          <div>
+            <div class="fw-semibold text-dark">{{ authService.getUser()?.name }}</div>
+            <div class="text-muted small text-truncate">{{ authService.getUser()?.email }}</div>
+          </div>
+        </div>
+
+        <nav class="mobile-nav-links">
+          <a
+            routerLink="/"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            class="mobile-nav-item"
+            (click)="closeMobileMenu()"
+          >
+            <i class="fa-solid fa-chart-pie me-2"></i>
+            Dashboard
+          </a>
+
+          <a
+            routerLink="/my-tasks"
+            routerLinkActive="active"
+            class="mobile-nav-item"
+            (click)="closeMobileMenu()"
+          >
+            <i class="fa-solid fa-list-check me-2"></i>
+            My Tasks
+          </a>
+
+          <a
+            routerLink="/kanban"
+            routerLinkActive="active"
+            class="mobile-nav-item"
+            (click)="closeMobileMenu()"
+          >
+            <i class="fa-solid fa-table-columns me-2"></i>
+            Kanban Board
+          </a>
+
+          <a
+            routerLink="/task/new"
+            routerLinkActive="active"
+            class="mobile-nav-item"
+            (click)="closeMobileMenu()"
+          >
+            <i class="fa-solid fa-plus me-2"></i>
+            Create New Task
+          </a>
+        </nav>
+
+        <div class="pt-3 mt-3 border-top">
+          <button type="button" class="btn btn-outline-danger w-100 justify-content-center" (click)="logout()">
+            <i class="fa-solid fa-arrow-right-from-bracket me-1"></i>
+            Log out
+          </button>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="!authService.isLoggedIn()">
+        <div class="d-flex flex-column gap-2 pt-2">
+          <a routerLink="/login" class="btn btn-outline-secondary w-100 justify-content-center" (click)="closeMobileMenu()">
+            Log in
+          </a>
+          <a routerLink="/signup" class="btn btn-primary w-100 justify-content-center" (click)="closeMobileMenu()">
+            Get Started
+          </a>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</header>

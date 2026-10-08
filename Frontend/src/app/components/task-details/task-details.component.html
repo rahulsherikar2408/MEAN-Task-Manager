@@ -1,350 +1,230 @@
-<div class="container mt-4">
-
-  <!-- Loading -->
-
-  <div
-    *ngIf="loading"
-    class="text-center py-5"
-  >
-
-    <div
-      class="spinner-border text-primary"
-      role="status"
-    ></div>
-
-    <p class="text-muted mt-2">
-      Loading task...
-    </p>
-
+<div class="app-container py-4">
+  <!-- Loading State -->
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading task...</span>
+    </div>
+    <p class="text-muted mt-2 small">Loading task details...</p>
   </div>
 
-
-  <!-- Task -->
-
-  <div
-    *ngIf="!loading && task"
-  >
-
-    <!-- Header -->
-
-    <div
-      class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-2 mb-4"
-    >
-
+  <!-- Task Details View -->
+  <div *ngIf="!loading && task">
+    <!-- Header with Back Link & Actions -->
+    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3 mb-4">
       <div>
-
         <button
           type="button"
-          class="btn btn-link p-0 text-decoration-none mb-2"
+          class="btn btn-link text-decoration-none p-0 text-muted small mb-2 d-inline-flex align-items-center gap-1"
           (click)="backToTasks()"
         >
-          <i class="fa-solid fa-arrow-left me-1"></i>
-          Back to Tasks
+          <i class="fa-solid fa-arrow-left"></i>
+          <span>Back to My Tasks</span>
         </button>
 
-        <h4 class="mb-0">
-          Task Details
-        </h4>
+        <div class="d-flex align-items-center gap-2">
+          <span class="badge-pill" [ngClass]="getStatusClass(task.status)">
+            <span class="badge-dot"></span>
+            {{ getStatusLabel(task.status) }}
+          </span>
 
+          <span class="badge-pill" [ngClass]="getPriorityClass(task.priority)">
+            {{ task.priority }} Priority
+          </span>
+
+          <span class="badge-category" *ngIf="task.category">
+            <i class="fa-solid fa-folder me-1 text-muted"></i>
+            {{ task.category }}
+          </span>
+        </div>
       </div>
 
-
       <!-- Actions -->
-
-      <div class="d-flex gap-2">
-
+      <div class="d-flex align-items-center gap-2">
         <button
           type="button"
-          class="btn btn-outline-primary"
+          class="btn btn-outline-secondary btn-sm"
           (click)="editTask()"
         >
           <i class="fa-solid fa-pen me-1"></i>
-          Edit
+          Edit Task
         </button>
 
         <button
           type="button"
-          class="btn btn-outline-danger"
+          class="btn btn-outline-danger btn-sm"
           (click)="deleteTask()"
           [disabled]="deleting"
         >
-
-          <span
-            *ngIf="deleting"
-            class="spinner-border spinner-border-sm me-1"
-          ></span>
-
-          <i
-            *ngIf="!deleting"
-            class="fa-regular fa-trash-can me-1"
-          ></i>
-
+          <span *ngIf="deleting" class="spinner-border spinner-border-sm me-1" role="status"></span>
+          <i *ngIf="!deleting" class="fa-regular fa-trash-can me-1"></i>
           Delete
-
         </button>
-
       </div>
-
     </div>
 
-
-    <!-- Main Card -->
-
-    <div class="card task-details-card shadow-sm">
-
-      <div class="card-body p-4">
-
-
-        <!-- Title -->
-
-        <div class="mb-4">
-
-          <h2 class="task-title mb-2">
+    <!-- Main Content Layout (2 Columns: Main Details + Sidebar Meta) -->
+    <div class="row g-4">
+      <!-- Left: Main Information -->
+      <div class="col-12 col-lg-8">
+        <div class="saas-card p-4 p-md-5 mb-4">
+          <!-- Title -->
+          <h2 class="task-details-title mb-3">
             {{ task.title }}
           </h2>
 
-          <div class="d-flex flex-wrap gap-2">
-
-            <span
-              class="status-badge"
-              [ngClass]="getStatusClass(task.status)"
+          <!-- Quick Status Switcher Toolbar -->
+          <div class="status-switcher-bar p-2 rounded-3 bg-slate-50 border mb-4 d-flex align-items-center gap-2 flex-wrap">
+            <span class="text-muted small fw-medium px-2">Set Status:</span>
+            <button
+              type="button"
+              class="btn btn-sm"
+              [ngClass]="task.status === 'TODO' ? 'btn-secondary fw-semibold' : 'btn-outline-secondary border-0'"
+              (click)="changeStatus('TODO')"
+              [disabled]="updatingStatus"
             >
-              {{ getStatusLabel(task.status) }}
-            </span>
-
-            <span
-              class="priority-badge"
-              [ngClass]="getPriorityClass(task.priority)"
+              <i class="fa-regular fa-circle-dot me-1"></i>
+              To Do
+            </button>
+            <button
+              type="button"
+              class="btn btn-sm"
+              [ngClass]="task.status === 'IN_PROGRESS' ? 'btn-primary fw-semibold' : 'btn-outline-secondary border-0'"
+              (click)="changeStatus('IN_PROGRESS')"
+              [disabled]="updatingStatus"
             >
-              {{ task.priority }}
-            </span>
-
-          </div>
-
-        </div>
-
-
-        <!-- Description -->
-
-        <div class="details-section">
-
-          <h6 class="section-title">
-            <i class="fa-solid fa-align-left me-2"></i>
-            Description
-          </h6>
-
-          <div
-            *ngIf="task.description"
-            class="description"
-          >
-            {{ task.description }}
-          </div>
-
-          <div
-            *ngIf="!task.description"
-            class="text-muted fst-italic"
-          >
-            No description provided.
-          </div>
-
-        </div>
-
-
-        <hr>
-
-
-        <!-- Task Information -->
-
-        <div class="details-section">
-
-          <h6 class="section-title">
-            <i class="fa-solid fa-circle-info me-2"></i>
-            Task Information
-          </h6>
-
-
-          <div class="row g-4">
-
-
-            <!-- Status -->
-
-            <div class="col-12 col-sm-6 col-lg-4">
-
-              <div class="info-label">
-                Status
-              </div>
-
-              <div class="info-value">
-
-                <span
-                  class="status-badge"
-                  [ngClass]="getStatusClass(task.status)"
-                >
-                  {{ getStatusLabel(task.status) }}
-                </span>
-
-              </div>
-
-            </div>
-
-
-            <!-- Priority -->
-
-            <div class="col-12 col-sm-6 col-lg-4">
-
-              <div class="info-label">
-                Priority
-              </div>
-
-              <div class="info-value">
-
-                <span
-                  class="priority-badge"
-                  [ngClass]="getPriorityClass(task.priority)"
-                >
-                  {{ task.priority }}
-                </span>
-
-              </div>
-
-            </div>
-
-
-            <!-- Category -->
-
-            <div class="col-12 col-sm-6 col-lg-4">
-
-              <div class="info-label">
-                Category
-              </div>
-
-              <div class="info-value">
-
-                <i class="fa-solid fa-folder me-1"></i>
-
-                {{ task.category || 'Other' }}
-
-              </div>
-
-            </div>
-
-
-            <!-- Due Date -->
-
-            <div class="col-12 col-sm-6 col-lg-4">
-
-              <div class="info-label">
-                Due Date
-              </div>
-
-              <div
-                class="info-value"
-                [ngClass]="{
-                  'text-danger fw-semibold': isOverdue(),
-                  'text-warning fw-semibold': isDueToday()
-                }"
-              >
-
-                <i class="fa-regular fa-calendar me-1"></i>
-
-                <span *ngIf="isOverdue()">
-                  Overdue ·
-                </span>
-
-                <span *ngIf="isDueToday()">
-                  Due Today ·
-                </span>
-
-                {{ formatDate(task.dueDate) }}
-
-              </div>
-
-            </div>
-
-
-            <!-- Created -->
-
-            <div class="col-12 col-sm-6 col-lg-4">
-
-              <div class="info-label">
-                Created
-              </div>
-
-              <div class="info-value">
-
-                <i class="fa-regular fa-calendar-plus me-1"></i>
-
-                {{ formatDateTime(task.createdAt) }}
-
-              </div>
-
-            </div>
-
-
-            <!-- Updated -->
-
-            <div class="col-12 col-sm-6 col-lg-4">
-
-              <div class="info-label">
-                Last Updated
-              </div>
-
-              <div class="info-value">
-
-                <i class="fa-regular fa-clock me-1"></i>
-
-                {{ formatDateTime(task.updatedAt) }}
-
-              </div>
-
-            </div>
-
-          </div>
-
-        </div>
-
-
-        <hr>
-
-
-        <!-- Tags -->
-
-        <div class="details-section">
-
-          <h6 class="section-title">
-            <i class="fa-solid fa-tags me-2"></i>
-            Tags
-          </h6>
-
-
-          <div
-            *ngIf="task.tags && task.tags.length > 0"
-            class="d-flex flex-wrap gap-2"
-          >
-
-            <span
-              *ngFor="let tag of task.tags"
-              class="tag"
+              <i class="fa-solid fa-spinner me-1"></i>
+              In Progress
+            </button>
+            <button
+              type="button"
+              class="btn btn-sm"
+              [ngClass]="task.status === 'COMPLETED' ? 'btn-success fw-semibold' : 'btn-outline-secondary border-0'"
+              (click)="changeStatus('COMPLETED')"
+              [disabled]="updatingStatus"
             >
-              #{{ tag }}
-            </span>
-
+              <i class="fa-solid fa-check me-1"></i>
+              Completed
+            </button>
           </div>
 
-
-          <div
-            *ngIf="!task.tags || task.tags.length === 0"
-            class="text-muted fst-italic"
-          >
-            No tags added.
+          <!-- Description Section -->
+          <div class="mb-4">
+            <h6 class="section-heading mb-2">
+              <i class="fa-solid fa-align-left text-primary me-2"></i>
+              Description
+            </h6>
+            <div *ngIf="task.description; else noDescription" class="task-description-content">
+              {{ task.description }}
+            </div>
+            <ng-template #noDescription>
+              <p class="text-muted fst-italic mb-0">No description provided for this task.</p>
+            </ng-template>
           </div>
 
+          <hr class="my-4 border-slate-200" />
+
+          <!-- Tags Section -->
+          <div>
+            <h6 class="section-heading mb-2">
+              <i class="fa-solid fa-tags text-primary me-2"></i>
+              Tags
+            </h6>
+            <div *ngIf="task.tags && task.tags.length > 0; else noTags" class="d-flex flex-wrap gap-2">
+              <span class="badge-tag" *ngFor="let tag of task.tags">
+                #{{ tag }}
+              </span>
+            </div>
+            <ng-template #noTags>
+              <span class="text-muted small fst-italic">No tags added</span>
+            </ng-template>
+          </div>
         </div>
-
       </div>
 
+      <!-- Right: Sidebar Information Panel -->
+      <div class="col-12 col-lg-4">
+        <div class="saas-card p-4">
+          <h6 class="fw-bold text-slate-900 mb-3 pb-2 border-bottom">
+            <i class="fa-solid fa-circle-info text-primary me-2"></i>
+            Task Properties
+          </h6>
+
+          <div class="d-flex flex-column gap-3">
+            <!-- Due Date Item -->
+            <div class="meta-item">
+              <span class="meta-label">Due Date</span>
+              <div class="meta-value">
+                <span
+                  class="badge-date"
+                  [ngClass]="{
+                    'overdue': isOverdue(),
+                    'due-today': isDueToday()
+                  }"
+                  *ngIf="task.dueDate; else noDueDate"
+                >
+                  <i class="fa-regular fa-calendar"></i>
+                  <span *ngIf="isOverdue()">Overdue · </span>
+                  <span *ngIf="isDueToday()">Due Today · </span>
+                  {{ formatDate(task.dueDate) }}
+                </span>
+                <ng-template #noDueDate>
+                  <span class="text-muted small">No due date set</span>
+                </ng-template>
+              </div>
+            </div>
+
+            <!-- Priority Item -->
+            <div class="meta-item">
+              <span class="meta-label">Priority Level</span>
+              <div class="meta-value">
+                <span class="badge-pill" [ngClass]="getPriorityClass(task.priority)">
+                  {{ task.priority }}
+                </span>
+              </div>
+            </div>
+
+            <!-- Category Item -->
+            <div class="meta-item">
+              <span class="meta-label">Category</span>
+              <div class="meta-value">
+                <span class="badge-category">
+                  <i class="fa-solid fa-folder text-muted"></i>
+                  {{ task.category || 'Other' }}
+                </span>
+              </div>
+            </div>
+
+            <!-- Current Status Item -->
+            <div class="meta-item">
+              <span class="meta-label">Current Status</span>
+              <div class="meta-value">
+                <span class="badge-pill" [ngClass]="getStatusClass(task.status)">
+                  <span class="badge-dot"></span>
+                  {{ getStatusLabel(task.status) }}
+                </span>
+              </div>
+            </div>
+
+            <!-- Created Date Item -->
+            <div class="meta-item">
+              <span class="meta-label">Created At</span>
+              <div class="meta-value text-slate-700 small">
+                <i class="fa-regular fa-calendar-plus text-muted me-1"></i>
+                {{ formatDateTime(task.createdAt) }}
+              </div>
+            </div>
+
+            <!-- Last Updated Item -->
+            <div class="meta-item">
+              <span class="meta-label">Last Updated</span>
+              <div class="meta-value text-slate-700 small">
+                <i class="fa-regular fa-clock text-muted me-1"></i>
+                {{ formatDateTime(task.updatedAt) }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-
   </div>
-
 </div>

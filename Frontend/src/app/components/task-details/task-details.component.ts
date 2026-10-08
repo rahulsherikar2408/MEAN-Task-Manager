@@ -15,6 +15,7 @@ export class TaskDetailsComponent implements OnInit {
 
   loading = false;
   deleting = false;
+  updatingStatus = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -36,9 +37,7 @@ export class TaskDetailsComponent implements OnInit {
 
     if (!taskId) {
       this.toastr.error('Task ID is missing.', 'Error');
-
       this.router.navigate(['/my-tasks']);
-
       return;
     }
 
@@ -47,18 +46,14 @@ export class TaskDetailsComponent implements OnInit {
     this.taskService.getTaskById(taskId).subscribe({
       next: (task) => {
         this.task = task;
-
         this.loading = false;
       },
-
       error: (error) => {
         this.loading = false;
-
         this.toastr.error(
           error.error?.message || 'Failed to load task.',
           'Error',
         );
-
         this.router.navigate(['/my-tasks']);
       },
     });
@@ -77,6 +72,35 @@ export class TaskDetailsComponent implements OnInit {
   }
 
   // ==========================
+  // Change Status
+  // ==========================
+
+  changeStatus(newStatus: Task['status']): void {
+    if (!this.task?._id || this.task.status === newStatus || this.updatingStatus) {
+      return;
+    }
+
+    this.updatingStatus = true;
+    this.taskService
+      .updateTask(this.task._id, { status: newStatus })
+      .subscribe({
+        next: (updated) => {
+          this.updatingStatus = false;
+          this.task = updated;
+          this.toastr.success(
+            `Status updated to ${this.getStatusLabel(newStatus)}.`,
+            'Success',
+          );
+        },
+        error: (error) => {
+          this.updatingStatus = false;
+          console.error(error);
+          this.toastr.error('Failed to update status.', 'Error');
+        },
+      });
+  }
+
+  // ==========================
   // Delete Task
   // ==========================
 
@@ -86,7 +110,7 @@ export class TaskDetailsComponent implements OnInit {
     }
 
     const confirmed = window.confirm(
-      `Are you sure you want to delete "${this.task.title}"?`,
+      `Are you sure you want to delete "${this.task.title}"? This action cannot be undone.`,
     );
 
     if (!confirmed) {
@@ -98,15 +122,11 @@ export class TaskDetailsComponent implements OnInit {
     this.taskService.deleteTask(this.task._id).subscribe({
       next: () => {
         this.deleting = false;
-
         this.toastr.success('Task deleted successfully.', 'Deleted');
-
         this.router.navigate(['/my-tasks']);
       },
-
       error: (error) => {
         this.deleting = false;
-
         this.toastr.error(
           error.error?.message || 'Failed to delete task.',
           'Error',
@@ -116,20 +136,17 @@ export class TaskDetailsComponent implements OnInit {
   }
 
   // ==========================
-  // Status
+  // Status Labels & Classes
   // ==========================
 
   getStatusLabel(status: string): string {
     switch (status) {
       case 'TODO':
         return 'To Do';
-
       case 'IN_PROGRESS':
         return 'In Progress';
-
       case 'COMPLETED':
         return 'Completed';
-
       default:
         return status;
     }
@@ -138,16 +155,13 @@ export class TaskDetailsComponent implements OnInit {
   getStatusClass(status: string): string {
     switch (status) {
       case 'TODO':
-        return 'status-todo';
-
+        return 'badge-status-todo';
       case 'IN_PROGRESS':
-        return 'status-progress';
-
+        return 'badge-status-progress';
       case 'COMPLETED':
-        return 'status-completed';
-
+        return 'badge-status-completed';
       default:
-        return 'status-default';
+        return 'badge-status-todo';
     }
   }
 
@@ -158,24 +172,20 @@ export class TaskDetailsComponent implements OnInit {
   getPriorityClass(priority: string): string {
     switch (priority) {
       case 'LOW':
-        return 'priority-low';
-
+        return 'badge-priority-low';
       case 'MEDIUM':
-        return 'priority-medium';
-
+        return 'badge-priority-medium';
       case 'HIGH':
-        return 'priority-high';
-
+        return 'badge-priority-high';
       case 'URGENT':
-        return 'priority-urgent';
-
+        return 'badge-priority-urgent';
       default:
-        return 'priority-default';
+        return 'badge-priority-medium';
     }
   }
 
   // ==========================
-  // Date
+  // Date Formatting
   // ==========================
 
   formatDate(date?: string | null): string {
@@ -183,8 +193,8 @@ export class TaskDetailsComponent implements OnInit {
       return 'Not specified';
     }
 
-    return new Date(date).toLocaleDateString('en-IN', {
-      day: '2-digit',
+    return new Date(date).toLocaleDateString('en-US', {
+      day: 'numeric',
       month: 'short',
       year: 'numeric',
     });
@@ -195,8 +205,8 @@ export class TaskDetailsComponent implements OnInit {
       return 'Not available';
     }
 
-    return new Date(date).toLocaleString('en-IN', {
-      day: '2-digit',
+    return new Date(date).toLocaleString('en-US', {
+      day: 'numeric',
       month: 'short',
       year: 'numeric',
       hour: '2-digit',
@@ -205,7 +215,7 @@ export class TaskDetailsComponent implements OnInit {
   }
 
   // ==========================
-  // Due Date
+  // Due Date Checks
   // ==========================
 
   isOverdue(): boolean {
@@ -214,11 +224,9 @@ export class TaskDetailsComponent implements OnInit {
     }
 
     const today = new Date();
-
     today.setHours(0, 0, 0, 0);
 
     const dueDate = new Date(this.task.dueDate);
-
     dueDate.setHours(0, 0, 0, 0);
 
     return dueDate < today;
@@ -230,19 +238,13 @@ export class TaskDetailsComponent implements OnInit {
     }
 
     const today = new Date();
-
     today.setHours(0, 0, 0, 0);
 
     const dueDate = new Date(this.task.dueDate);
-
     dueDate.setHours(0, 0, 0, 0);
 
     return dueDate.getTime() === today.getTime();
   }
-
-  // ==========================
-  // Back
-  // ==========================
 
   backToTasks(): void {
     this.router.navigate(['/my-tasks']);

@@ -62,6 +62,26 @@ export class TaskListComponent implements OnInit, OnDestroy {
   today = new Date().toISOString().split('T')[0];
   categories = ['Work', 'Study', 'Personal', 'Project', 'Other'];
 
+  showAdvancedFilters = false;
+
+  toggleAdvancedFilters(): void {
+    this.showAdvancedFilters = !this.showAdvancedFilters;
+  }
+
+  hasActiveFilters(): boolean {
+    return !!(
+      this.searchText ||
+      this.statusFilter !== 'All' ||
+      this.priorityFilter !== 'All' ||
+      this.categoryFilter !== 'All' ||
+      this.dueFrom ||
+      this.dueTo ||
+      this.overdueOnly ||
+      this.sortBy !== 'createdAt' ||
+      this.sortOrder !== 'desc'
+    );
+  }
+
   // =========================
   // Loading
   // =========================
@@ -74,7 +94,7 @@ export class TaskListComponent implements OnInit, OnDestroy {
 
   currentPage = 1;
 
-  pageSize = 10;
+  pageSize = 6;
 
   totalTasks = 0;
 

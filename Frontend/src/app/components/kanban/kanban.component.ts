@@ -267,26 +267,18 @@ export class KanbanComponent implements OnInit {
   // Priority
   // ==========================
 
-  getPriorityClass(
-    priority: string
-  ): string {
-
+  getPriorityClass(priority: string): string {
     switch (priority) {
-
       case 'LOW':
-        return 'priority-low';
-
+        return 'badge-priority-low';
       case 'MEDIUM':
-        return 'priority-medium';
-
+        return 'badge-priority-medium';
       case 'HIGH':
-        return 'priority-high';
-
+        return 'badge-priority-high';
       case 'URGENT':
-        return 'priority-urgent';
-
+        return 'badge-priority-urgent';
       default:
-        return 'priority-default';
+        return 'badge-priority-medium';
     }
   }
 
@@ -370,7 +362,7 @@ export class KanbanComponent implements OnInit {
   // ==========================
 
   addTask(): void {
-    this.router.navigate(['/tasks/new']);
+    this.router.navigate(['/task/new']);
   }
 
 

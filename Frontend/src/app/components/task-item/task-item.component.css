@@ -1,0 +1,125 @@
+/* ==========================================================================
+   TASK ITEM COMPONENT STYLES
+   ========================================================================== */
+
+.task-item-card {
+  position: relative;
+  background: #ffffff;
+  transition: all 0.15s ease;
+}
+
+.task-item-card:hover {
+  border-color: var(--border-hover);
+  box-shadow: var(--shadow-sm);
+}
+
+.task-item-completed {
+  background-color: #fafbfc;
+}
+
+.task-item-overdue {
+  border-left: 3px solid var(--danger) !important;
+}
+
+/* Status Checkbox Button */
+.status-toggle-btn {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid var(--slate-300);
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
+  flex-shrink: 0;
+  margin-top: 3px;
+  color: #ffffff;
+  font-size: 0.65rem;
+  transition: all 0.15s ease;
+}
+
+.status-toggle-btn:hover {
+  border-color: var(--success);
+  background-color: var(--success-bg);
+}
+
+.status-toggle-btn.checked {
+  background-color: var(--success);
+  border-color: var(--success);
+}
+
+.status-toggle-spinner {
+  width: 12px;
+  height: 12px;
+  border-width: 2px;
+  color: var(--primary);
+}
+
+/* Title & Description */
+.task-item-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--slate-900);
+  line-height: 1.4;
+  transition: color 0.15s ease;
+}
+
+.task-item-title:hover {
+  color: var(--primary);
+}
+
+.completed-title {
+  text-decoration: line-through;
+  color: var(--slate-400) !important;
+}
+
+.task-item-desc {
+  font-size: 0.85rem;
+  color: var(--slate-500);
+  line-height: 1.45;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Action Icon Buttons */
+.action-icon-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  border: 1px solid transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  color: var(--slate-400);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.action-view:hover {
+  background: var(--primary-50);
+  color: var(--primary);
+  border-color: var(--primary-200);
+}
+
+.action-edit:hover {
+  background: var(--slate-100);
+  color: var(--slate-700);
+  border-color: var(--slate-200);
+}
+
+.action-delete:hover {
+  background: var(--danger-bg);
+  color: var(--danger-text);
+  border-color: var(--danger-border);
+}
+
+.action-icon-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

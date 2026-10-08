@@ -1,16 +1,16 @@
-.card {
-  border-radius: 12px;
+/* ==========================================================================
+   ADD TASK COMPONENT STYLES
+   ========================================================================== */
+
+.form-page-container {
+  max-width: 780px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.form-control,
-.form-select {
-  border-radius: 8px;
-}
-
-textarea {
-  resize: vertical;
-}
-
-.btn {
-  border-radius: 8px;
+.form-section-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--slate-800);
+  letter-spacing: -0.01em;
 }
